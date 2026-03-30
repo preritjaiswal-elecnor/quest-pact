@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quest Pact · Enter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #06080d;
+    --stone: #0d1118;
+    --card: #131820;
+    --border: #1e2a3a;
+    --border-bright: #3a5068;
+    --gold: #c9a84c;
+    --gold-dim: #6a5020;
+    --text: #e0d4bc;
+    --text-mid: #8a9aaa;
+    --text-dim: #3a4a5a;
+    --crimson: #7a1818;
+    --success: #2a6a40;
+    --success-bright: #40c070;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--void); color:var(--text); font-family:'Crimson Pro',Georgia,serif; min-height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; }
+  canvas#bg { position:fixed; inset:0; z-index:0; pointer-events:none; }
+  body::after { content:''; position:fixed; inset:0; background:radial-gradient(ellipse at center, transparent 30%, rgba(4,6,10,0.85) 100%); pointer-events:none; z-index:1; }
+  .login-wrap { position:relative; z-index:10; width:100%; max-width:440px; padding:24px; animation:fadeUp 0.8s ease both; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+  .deco-line { text-align:center; margin-bottom:32px; display:flex; align-items:center; gap:16px; }
+  .deco-line::before,.deco-line::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,transparent,var(--gold-dim),transparent); }
+  .deco-rune { color:var(--gold-dim); font-size:20px; }
+  .brand { text-align:center; margin-bottom:40px; }
+  .brand-title { font-family:'Cinzel',serif; font-size:42px; font-weight:900; letter-spacing:6px; color:var(--gold); text-shadow:0 0 40px rgba(201,168,76,0.3),0 0 80px rgba(201,168,76,0.1); line-height:1; margin-bottom:10px; }
+  .brand-subtitle { font-size:15px; font-style:italic; color:var(--text-dim); letter-spacing:2px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:32px; box-shadow:0 0 60px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.03); }
+  .tabs { display:flex; margin-bottom:28px; border:1px solid var(--border); border-radius:6px; overflow:hidden; }
+  .tab { flex:1; padding:10px; text-align:center; cursor:pointer; font-family:'Cinzel',serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); background:transparent; border:none; transition:all 0.2s; }
+  .tab.active { background:rgba(201,168,76,0.1); color:var(--gold); border-bottom:2px solid var(--gold); }
+  .tab-panel { display:none; } .tab-panel.active { display:block; }
+  .form-group { margin-bottom:18px; }
+  .form-label { display:block; font-family:'Cinzel',serif; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); margin-bottom:7px; }
+  .form-select,.form-input { width:100%; background:var(--stone); border:1px solid var(--border); border-radius:6px; padding:12px 14px; color:var(--text); font-family:'Crimson Pro',serif; font-size:16px; outline:none; transition:border-color 0.2s,box-shadow 0.2s; -webkit-appearance:none; }
+  .form-select option { background:var(--stone); }
+  .form-input:focus,.form-select:focus { border-color:var(--gold-dim); box-shadow:0 0 0 3px rgba(201,168,76,0.08); }
+  .form-input::placeholder { color:var(--text-dim); }
+  .pw-wrap { position:relative; }
+  .pw-toggle { position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--text-dim); cursor:pointer; font-size:16px; padding:4px; transition:color 0.2s; }
+  .pw-toggle:hover { color:var(--text-mid); }
+  .btn { width:100%; padding:13px; border-radius:6px; font-family:'Cinzel',serif; font-size:12px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; border:1px solid var(--gold-dim); background:linear-gradient(135deg,rgba(201,168,76,0.12),rgba(201,168,76,0.06)); color:var(--gold); transition:all 0.25s; margin-top:8px; }
+  .btn:hover:not(:disabled) { border-color:var(--gold); background:linear-gradient(135deg,rgba(201,168,76,0.2),rgba(201,168,76,0.1)); box-shadow:0 0 20px rgba(201,168,76,0.15); }
+  .btn:disabled { opacity:0.4; cursor:not-allowed; }
+  .error-msg { margin-top:14px; padding:11px 14px; background:rgba(122,24,24,0.2); border:1px solid var(--crimson); border-radius:6px; font-size:14px; color:#ff8080; display:none; }
+  .success-msg { margin-top:14px; padding:11px 14px; background:rgba(42,106,64,0.2); border:1px solid var(--success); border-radius:6px; font-size:14px; color:var(--success-bright); display:none; }
+  .hint { margin-top:14px; font-size:13px; color:var(--text-dim); text-align:center; font-style:italic; line-height:1.5; }
+  .loading-ring { display:inline-block; width:16px; height:16px; border:2px solid rgba(201,168,76,0.3); border-top-color:var(--gold); border-radius:50%; animation:spin 0.6s linear infinite; vertical-align:middle; margin-right:6px; }
+  @keyframes spin { to{transform:rotate(360deg)} }
+  .footer-deco { text-align:center; margin-top:28px; font-family:'Cinzel',serif; font-size:10px; letter-spacing:3px; color:var(--text-dim); }
+  .notice { background:rgba(58,106,170,0.1); border:1px solid rgba(58,106,170,0.3); border-radius:6px; padding:11px 14px; font-size:13px; color:#80b0ff; display:none; margin-top:10px; line-height:1.5; }
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div class="login-wrap">
+  <div class="deco-line"><span class="deco-rune">✦</span></div>
+  <div class="brand">
+    <div class="brand-title">QUEST PACT</div>
+    <div class="brand-subtitle">the covenant of trials</div>
+  </div>
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('login')">Enter the Realm</button>
+      <button class="tab" onclick="switchTab('register')">Set Password</button>
+    </div>
+    <div class="tab-panel active" id="tab-login">
+      <div class="form-group">
+        <label class="form-label">Who are you?</label>
+        <select class="form-select" id="loginPlayer"><option value="">Loading...</option></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="pw-wrap">
+          <input type="password" class="form-input" id="loginPassword" placeholder="Your secret word..." autocomplete="current-password">
+          <button class="pw-toggle" onclick="togglePw('loginPassword',this)">👁</button>
+        </div>
+      </div>
+      <div class="notice" id="noPasswordNotice">This player hasn't set a password yet. Switch to <strong>Set Password</strong> tab.</div>
+      <button class="btn" id="loginBtn" onclick="doLogin()">Enter the Realm</button>
+      <div class="error-msg" id="loginError"></div>
+    </div>
+    <div class="tab-panel" id="tab-register">
+      <div class="form-group">
+        <label class="form-label">Your Player</label>
+        <select class="form-select" id="registerPlayer"><option value="">Loading...</option></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Set Password</label>
+        <div class="pw-wrap">
+          <input type="password" class="form-input" id="registerPassword" placeholder="Min. 6 characters..." autocomplete="new-password">
+          <button class="pw-toggle" onclick="togglePw('registerPassword',this)">👁</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm Password</label>
+        <div class="pw-wrap">
+          <input type="password" class="form-input" id="registerConfirm" placeholder="Repeat your word..." autocomplete="new-password">
+          <button class="pw-toggle" onclick="togglePw('registerConfirm',this)">👁</button>
+        </div>
+      </div>
+      <button class="btn" id="registerBtn" onclick="doRegister()">Seal the Password</button>
+      <div class="error-msg" id="registerError"></div>
+      <div class="success-msg" id="registerSuccess">Password sealed. You may now enter the realm.</div>
+      <div class="hint">Only you know this password. It is hashed with PBKDF2 and cannot be retrieved.</div>
+    </div>
+  </div>
+  <div class="footer-deco">⚔ &nbsp; QUEST PACT &nbsp; ⚔</div>
+</div>
+<script>
+const bgCanvas=document.getElementById('bg'),bgCtx=bgCanvas.getContext('2d');let stars=[];
+function resizeBg(){bgCanvas.width=window.innerWidth;bgCanvas.height=window.innerHeight;}
+function initStars(){stars=[];for(let i=0;i<200;i++)stars.push({x:Math.random()*bgCanvas.width,y:Math.random()*bgCanvas.height,r:Math.random()*1.2,speed:0.1+Math.random()*0.2,opacity:0.2+Math.random()*0.6});}
+function drawBg(){bgCtx.clearRect(0,0,bgCanvas.width,bgCanvas.height);bgCtx.fillStyle='#06080d';bgCtx.fillRect(0,0,bgCanvas.width,bgCanvas.height);stars.forEach(s=>{s.y-=s.speed;if(s.y<0){s.y=bgCanvas.height;s.x=Math.random()*bgCanvas.width;}bgCtx.beginPath();bgCtx.arc(s.x,s.y,s.r,0,Math.PI*2);bgCtx.fillStyle=`rgba(200,180,140,${s.opacity})`;bgCtx.fill();});requestAnimationFrame(drawBg);}
+window.addEventListener('resize',()=>{resizeBg();initStars();});resizeBg();initStars();drawBg();
+
+let players=[];
+async function loadPlayers(){
+  try{
+    const res=await fetch('/api/state');const state=await res.json();
+    players=state.players||[];
+    const opts=players.length?players.map(p=>`<option value="${p.id}">${p.name} — ${p.city}, ${p.country}</option>`).join(''):'<option value="">No players yet</option>';
+    document.getElementById('loginPlayer').innerHTML=opts;
+    document.getElementById('registerPlayer').innerHTML=opts;
+    if(players.length)checkHasPassword(players[0].id);
+  }catch(e){console.error(e);}
+}
+document.getElementById('loginPlayer').addEventListener('change',e=>checkHasPassword(e.target.value));
+async function checkHasPassword(pid){
+  if(!pid)return;
+  try{
+    const res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'hasPassword',playerId:pid})});
+    const data=await res.json();
+    document.getElementById('noPasswordNotice').style.display=data.has?'none':'block';
+  }catch{}
+}
+function switchTab(tab){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['login','register'][i]===tab));
+  document.querySelectorAll('.tab-panel').forEach((p,i)=>p.classList.toggle('active',['login','register'][i]===tab));
+  clearMsgs();
+}
+function clearMsgs(){['loginError','registerError','registerSuccess'].forEach(id=>{const e=document.getElementById(id);if(e){e.style.display='none';e.textContent='';}})}
+function togglePw(inputId,btn){const inp=document.getElementById(inputId);inp.type=inp.type==='password'?'text':'password';btn.textContent=inp.type==='password'?'👁':'🙈';}
+function setLoading(btnId,loading,label){const btn=document.getElementById(btnId);btn.disabled=loading;btn.innerHTML=loading?'<span class="loading-ring"></span> One moment...':(label||'Submit');}
+function showError(id,msg){const el=document.getElementById(id);el.textContent=msg;el.style.display='block';}
+async function doLogin(){
+  clearMsgs();
+  const pid=document.getElementById('loginPlayer').value;
+  const pw=document.getElementById('loginPassword').value;
+  if(!pid||!pw){showError('loginError','Choose a player and enter your password.');return;}
+  setLoading('loginBtn',true,'Enter the Realm');
+  try{
+    const res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'login',playerId:pid,password:pw})});
+    const data=await res.json();
+    if(!res.ok){showError('loginError',data.error||'Login failed.');return;}
+    sessionStorage.setItem('qp_token',data.token);
+    sessionStorage.setItem('qp_player',data.playerId);
+    window.location.href='/app.html';
+  }catch(e){showError('loginError','Could not reach the server.');}
+  finally{setLoading('loginBtn',false,'Enter the Realm');}
+}
+async function doRegister(){
+  clearMsgs();
+  const pid=document.getElementById('registerPlayer').value;
+  const pw=document.getElementById('registerPassword').value;
+  const conf=document.getElementById('registerConfirm').value;
+  if(!pid){showError('registerError','Select your player.');return;}
+  if(pw.length<6){showError('registerError','Password must be at least 6 characters.');return;}
+  if(pw!==conf){showError('registerError','Passwords do not match.');return;}
+  setLoading('registerBtn',true,'Seal the Password');
+  try{
+    const res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'register',playerId:pid,password:pw})});
+    const data=await res.json();
+    if(!res.ok){showError('registerError',data.error||'Registration failed.');return;}
+    document.getElementById('registerSuccess').style.display='block';
+    document.getElementById('registerPassword').value='';
+    document.getElementById('registerConfirm').value='';
+  }catch(e){showError('registerError','Could not reach the server.');}
+  finally{setLoading('registerBtn',false,'Seal the Password');}
+}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'){if(document.getElementById('tab-login').classList.contains('active'))doLogin();else doRegister();}});
+loadPlayers();
+</script>
+</body>
+</html>

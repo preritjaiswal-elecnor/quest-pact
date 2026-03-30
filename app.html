@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quest Pact</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root{
+  --void:#06080d;--stone:#0d1118;--bg:#10151e;--card:#141b26;--card2:#1a2232;
+  --border:#1e2d40;--border2:#2e4560;
+  --gold:#c9a84c;--gold2:#f0c060;--gold3:#7a5820;
+  --crimson:#8b1a1a;--crimson2:#c02828;
+  --ember:#d4621a;--ember2:#ff8040;
+  --silver:#a0b4c8;--silver2:#506070;
+  --text:#e8dfc8;--textm:#9aa8b8;--textd:#445566;
+  --ok:#2d7a4a;--ok2:#40c070;
+  --rune:#2a5a9a;--rune2:#60a0ff;
+  --purple:#6a28aa;--purple2:#b080ff;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{background:var(--void);color:var(--text);font-family:'Crimson Pro',Georgia,serif;font-size:15px;display:flex;flex-direction:column;}
+
+/* ── NAV ── */
+nav{flex-shrink:0;background:rgba(6,8,13,0.97);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);z-index:100;position:relative;}
+.nav-inner{max-width:none;padding:0 20px;height:56px;display:flex;align-items:center;gap:20px;}
+.nav-logo{font-family:'Cinzel',serif;font-size:18px;font-weight:900;letter-spacing:3px;color:var(--gold);text-shadow:0 0 20px rgba(201,168,76,0.4);cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:8px;}
+.nav-tabs{display:flex;gap:2px;flex:1;}
+.nav-tab{padding:6px 14px;border-radius:4px;cursor:pointer;font-family:'Cinzel',serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--textd);background:none;border:1px solid transparent;transition:all 0.2s;white-space:nowrap;}
+.nav-tab:hover{color:var(--textm);background:rgba(255,255,255,0.04);}
+.nav-tab.active{color:var(--gold);border-color:var(--border);background:rgba(201,168,76,0.07);}
+.nav-right{display:flex;align-items:center;gap:10px;margin-left:auto;}
+.player-pill{display:flex;align-items:center;gap:7px;padding:4px 12px;border-radius:20px;cursor:pointer;border:1px solid var(--border);background:var(--card);font-size:13px;color:var(--textm);transition:all 0.2s;}
+.player-pill.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.09);}
+.player-pill:hover{border-color:var(--border2);}
+.pav{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:'Cinzel',serif;}
+.nav-user{font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;color:var(--textd);}
+.logout-btn{padding:4px 10px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--textd);background:none;border:1px solid var(--border);border-radius:3px;cursor:pointer;transition:all 0.2s;}
+.logout-btn:hover{color:var(--crimson2);border-color:var(--crimson);}
+
+/* ── LAYOUT ── */
+.app-body{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+.page{display:none;flex:1;overflow:hidden;}
+.page.active{display:flex;flex-direction:column;}
+.page-scroll{flex:1;overflow-y:auto;padding:24px;}
+
+/* ── GLOBE PAGE ── */
+#page-globe{flex-direction:row;}
+.globe-pane{flex:1;position:relative;background:radial-gradient(ellipse at 40% 40%,#0a1520 0%,#030608 100%);overflow:hidden;}
+#globeCanvas{width:100%;height:100%;display:block;cursor:grab;}
+#globeCanvas:active{cursor:grabbing;}
+.globe-hud{position:absolute;top:16px;left:16px;pointer-events:none;}
+.globe-hud-title{font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;color:rgba(160,180,200,0.5);text-transform:uppercase;}
+.globe-tooltip{position:absolute;background:rgba(10,15,24,0.95);border:1px solid var(--border2);border-radius:8px;padding:10px 14px;pointer-events:none;display:none;z-index:50;min-width:180px;}
+.globe-tooltip-name{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);margin-bottom:3px;}
+.globe-tooltip-sub{font-size:12px;color:var(--textm);}
+.globe-sidebar{width:340px;flex-shrink:0;overflow-y:auto;border-left:1px solid var(--border);background:var(--bg);padding:16px;display:flex;flex-direction:column;gap:12px;}
+
+/* ── QUEST PIN POPUP ── */
+.quest-pin-popup{position:absolute;background:rgba(10,15,24,0.97);border:1px solid var(--gold3);border-radius:10px;padding:16px;pointer-events:auto;display:none;z-index:60;width:260px;box-shadow:0 0 30px rgba(0,0,0,0.8);}
+.qpp-close{position:absolute;top:8px;right:8px;background:none;border:none;color:var(--textd);cursor:pointer;font-size:13px;}
+.qpp-close:hover{color:var(--text);}
+.qpp-title{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);margin-bottom:6px;padding-right:20px;}
+.qpp-desc{font-size:13px;color:var(--textm);margin-bottom:10px;line-height:1.5;}
+.qpp-status{font-size:11px;letter-spacing:1px;text-transform:uppercase;font-family:'Cinzel',serif;}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;}
+.card:hover{border-color:var(--border2);}
+.ctitle{font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--silver2);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.ctitle::before{content:'';flex:none;width:16px;height:1px;background:var(--border2);}
+
+/* ── PLAYER CARD ── */
+.pc-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.pc-av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:18px;font-weight:700;border:2px solid;flex-shrink:0;}
+.pc-name{font-family:'Cinzel',serif;font-size:14px;font-weight:600;color:var(--text);}
+.pc-loc{font-size:12px;color:var(--textd);margin-top:2px;}
+.pc-rank{font-size:11px;color:var(--gold3);font-style:italic;margin-top:1px;}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;}
+.sbox{background:var(--stone);border-radius:5px;padding:8px 6px;text-align:center;border:1px solid var(--border);}
+.sval{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--gold);}
+.slbl{font-size:10px;color:var(--textd);letter-spacing:1px;text-transform:uppercase;margin-top:1px;}
+.xpbar{margin-top:8px;}
+.xpbar-lbl{display:flex;justify-content:space-between;font-size:11px;color:var(--textd);margin-bottom:4px;}
+.xpbar-track{height:5px;background:var(--stone);border-radius:3px;overflow:hidden;border:1px solid var(--border);}
+.xpbar-fill{height:100%;border-radius:3px;transition:width 0.6s ease;}
+
+/* ── QUEST BOARD ── */
+.quest-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;}
+.qcard{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px;transition:all 0.2s;position:relative;overflow:hidden;cursor:default;}
+.qcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.qcard.s-active::before{background:linear-gradient(90deg,var(--rune),var(--rune2));}
+.qcard.s-pending_proof::before{background:linear-gradient(90deg,var(--ember),var(--ember2));}
+.qcard.s-awaiting_review::before{background:linear-gradient(90deg,var(--gold3),var(--gold));}
+.qcard.s-completed::before{background:linear-gradient(90deg,var(--ok),var(--ok2));}
+.qcard.s-failed::before{background:linear-gradient(90deg,var(--crimson),var(--crimson2));}
+.qcard.s-disputed::before{background:linear-gradient(90deg,#8b4a1a,#d47020);}
+.qcard:hover{border-color:var(--border2);transform:translateY(-1px);}
+.qcard-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.qbadge{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;padding:3px 8px;border-radius:3px;font-weight:600;font-family:'Cinzel',serif;}
+.b-active{background:rgba(96,160,255,0.12);color:var(--rune2);border:1px solid rgba(96,160,255,0.25);}
+.b-pending_proof{background:rgba(212,98,26,0.12);color:var(--ember2);border:1px solid rgba(212,98,26,0.25);}
+.b-awaiting_review{background:rgba(201,168,76,0.12);color:var(--gold);border:1px solid rgba(201,168,76,0.25);}
+.b-completed{background:rgba(45,122,74,0.12);color:var(--ok2);border:1px solid rgba(45,122,74,0.25);}
+.b-failed{background:rgba(139,26,26,0.12);color:#ff6060;border:1px solid rgba(139,26,26,0.25);}
+.b-disputed{background:rgba(139,74,26,0.12);color:#d47020;border:1px solid rgba(139,74,26,0.25);}
+.qtitle{font-family:'Cinzel',serif;font-size:14px;font-weight:600;color:var(--text);margin-bottom:5px;line-height:1.4;}
+.qdesc{font-size:13px;color:var(--textm);line-height:1.6;margin-bottom:12px;}
+.qmeta{display:flex;gap:12px;font-size:12px;color:var(--textd);margin-bottom:10px;flex-wrap:wrap;}
+.qdeadline{font-size:11px;padding:3px 8px;border-radius:3px;display:inline-flex;align-items:center;gap:4px;}
+.dl-ok{background:rgba(45,122,74,0.12);color:var(--ok2);}
+.dl-soon{background:rgba(212,98,26,0.12);color:var(--ember2);}
+.dl-crit{background:rgba(139,26,26,0.15);color:#ff6060;}
+.dl-past{background:rgba(60,60,60,0.15);color:var(--textd);}
+.qactions{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;}
+.proof-thumb{margin-top:10px;display:flex;align-items:center;gap:8px;background:var(--stone);border:1px solid var(--border);border-radius:5px;padding:8px 10px;font-size:12px;color:var(--textm);cursor:pointer;transition:border-color 0.2s;}
+.proof-thumb:hover{border-color:var(--gold3);}
+
+/* ── BUTTONS ── */
+.btn{padding:7px 16px;border-radius:5px;font-family:'Crimson Pro',serif;font-size:13px;font-weight:600;cursor:pointer;border:1px solid transparent;transition:all 0.2s;letter-spacing:0.3px;}
+.btn-primary{background:linear-gradient(135deg,#1e3a28,#2a5038);border-color:var(--ok);color:var(--ok2);}
+.btn-primary:hover{background:linear-gradient(135deg,#2a5038,#386848);box-shadow:0 0 10px rgba(64,192,112,0.15);}
+.btn-gold{background:linear-gradient(135deg,#221808,#32280e);border-color:var(--gold3);color:var(--gold);}
+.btn-gold:hover{border-color:var(--gold);box-shadow:0 0 10px rgba(201,168,76,0.15);}
+.btn-danger{background:linear-gradient(135deg,#220a0a,#361212);border-color:var(--crimson);color:#ff6060;}
+.btn-danger:hover{border-color:var(--crimson2);}
+.btn-ghost{background:transparent;border-color:var(--border);color:var(--textm);}
+.btn-ghost:hover{border-color:var(--border2);color:var(--text);}
+.btn-rune{background:linear-gradient(135deg,#121e30,#182840);border-color:var(--rune);color:var(--rune2);}
+.btn-rune:hover{box-shadow:0 0 10px rgba(96,160,255,0.15);}
+.btn-sm{padding:5px 10px;font-size:12px;}
+.btn-full{width:100%;text-align:center;}
+.btn:disabled{opacity:0.4;cursor:not-allowed;}
+
+/* ── MODAL ── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(4,6,10,0.88);backdrop-filter:blur(5px);z-index:200;align-items:center;justify-content:center;padding:20px;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--card2);border:1px solid var(--border2);border-radius:12px;padding:26px;max-width:560px;width:100%;max-height:88vh;overflow-y:auto;position:relative;box-shadow:0 0 80px rgba(0,0,0,0.9),0 0 30px rgba(74,96,128,0.1);}
+.modal-title{font-family:'Cinzel',serif;font-size:17px;font-weight:700;color:var(--gold);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border);letter-spacing:1px;}
+.modal-x{position:absolute;top:14px;right:14px;background:none;border:1px solid var(--border);color:var(--textd);width:26px;height:26px;border-radius:4px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.modal-x:hover{border-color:var(--border2);color:var(--text);}
+
+/* ── FORMS ── */
+.fg{margin-bottom:14px;}
+.flbl{display:block;font-family:'Cinzel',serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--textd);margin-bottom:5px;}
+.finp,.fsel,.ftxt{width:100%;background:var(--stone);border:1px solid var(--border);border-radius:5px;padding:9px 12px;color:var(--text);font-family:'Crimson Pro',serif;font-size:15px;transition:border-color 0.2s;outline:none;}
+.finp:focus,.fsel:focus,.ftxt:focus{border-color:var(--gold3);box-shadow:0 0 0 2px rgba(201,168,76,0.08);}
+.finp::placeholder{color:var(--textd);}
+.fsel option{background:var(--stone);}
+.ftxt{resize:vertical;min-height:80px;line-height:1.6;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+/* ── GALLERY ── */
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+.gcard{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;transition:all 0.2s;cursor:pointer;}
+.gcard:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.4);}
+.gcard-media{height:180px;overflow:hidden;background:var(--stone);position:relative;display:flex;align-items:center;justify-content:center;}
+.gcard-media img{width:100%;height:100%;object-fit:cover;}
+.gcard-media video{width:100%;height:100%;object-fit:cover;}
+.gcard-media-icon{font-size:48px;opacity:0.4;}
+.gcard-body{padding:14px;}
+.gcard-quest{font-family:'Cinzel',serif;font-size:12px;color:var(--gold);margin-bottom:4px;}
+.gcard-note{font-size:13px;color:var(--textm);line-height:1.5;}
+.gcard-meta{font-size:11px;color:var(--textd);margin-top:8px;}
+
+/* ── TROPHIES ── */
+.trophy-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
+.tcard{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px 14px;text-align:center;transition:all 0.3s;}
+.tcard.unlocked{border-color:var(--gold3);background:linear-gradient(135deg,var(--card),#1a1608);}
+.tcard.unlocked:hover{border-color:var(--gold);box-shadow:0 0 16px rgba(201,168,76,0.12);transform:translateY(-2px);}
+.tcard.locked{opacity:0.4;}
+.ticon{font-size:32px;margin-bottom:8px;}
+.tname{font-family:'Cinzel',serif;font-size:11px;font-weight:600;color:var(--gold);margin-bottom:4px;letter-spacing:0.4px;}
+.tcard.locked .tname{color:var(--textd);}
+.tdesc{font-size:11px;color:var(--textd);line-height:1.4;}
+.trarity{font-size:9px;letter-spacing:1px;text-transform:uppercase;margin-top:7px;padding:2px 7px;border-radius:3px;display:inline-block;}
+.r-common{background:rgba(100,120,140,0.15);color:var(--silver2);}
+.r-rare{background:rgba(42,90,154,0.15);color:var(--rune2);}
+.r-epic{background:rgba(100,40,140,0.15);color:var(--purple2);}
+.r-legendary{background:rgba(201,168,76,0.15);color:var(--gold);}
+
+/* ── LEDGER ── */
+.lbal{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+.lbal-card{background:var(--stone);border-radius:7px;padding:18px;text-align:center;border:1px solid var(--border);}
+.lbal-amt{font-family:'Cinzel',serif;font-size:28px;font-weight:700;}
+.lbal-lbl{font-size:12px;color:var(--textd);margin-top:3px;}
+.ltable{width:100%;border-collapse:collapse;}
+.ltable th{font-family:'Cinzel',serif;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--textd);padding:7px 10px;text-align:left;border-bottom:1px solid var(--border);}
+.ltable td{padding:10px 10px;font-size:13px;color:var(--textm);border-bottom:1px solid rgba(30,45,64,0.5);}
+.ltable tr:hover td{background:rgba(255,255,255,0.02);}
+.amt-pos{color:var(--ok2);font-weight:600;}
+.amt-neg{color:#ff6060;font-weight:600;}
+
+/* ── MISC ── */
+.page-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px;}
+.ph-title{font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--text);letter-spacing:1px;}
+.ph-sub{font-size:13px;color:var(--textd);margin-top:3px;font-style:italic;}
+.sec-title{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--silver2);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.divider{border:none;border-top:1px solid var(--border);margin:16px 0;}
+.empty{text-align:center;padding:50px 20px;color:var(--textd);}
+.empty-icon{font-size:40px;margin-bottom:12px;opacity:0.4;}
+.empty-text{font-size:15px;font-style:italic;}
+.upload-zone{border:2px dashed var(--border);border-radius:7px;padding:28px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--stone);}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--gold3);background:rgba(201,168,76,0.03);}
+.upload-icon{font-size:28px;margin-bottom:6px;}
+.upload-text{font-size:13px;color:var(--textm);}
+.upload-hint{font-size:11px;color:var(--textd);margin-top:3px;}
+.proof-prev{margin-top:10px;padding:8px 12px;background:var(--stone);border:1px solid var(--border);border-radius:5px;font-size:12px;color:var(--textm);display:flex;align-items:center;gap:7px;}
+.dispute-box{background:rgba(139,74,26,0.1);border:1px solid rgba(139,74,26,0.35);border-radius:7px;padding:12px;font-size:13px;color:#d47020;line-height:1.5;}
+.settle-box{background:rgba(45,122,74,0.07);border:1px solid rgba(45,122,74,0.25);border-radius:7px;padding:14px;margin-bottom:16px;}
+.toast-wrap{position:fixed;bottom:20px;right:20px;z-index:500;display:flex;flex-direction:column;gap:7px;}
+.toast{background:var(--card2);border:1px solid var(--border2);border-radius:7px;padding:10px 16px;font-size:13px;color:var(--text);box-shadow:0 4px 20px rgba(0,0,0,0.5);animation:toastIn 0.3s ease;max-width:300px;}
+.toast.ok{border-color:var(--ok);}
+.toast.err{border-color:var(--crimson2);}
+@keyframes toastIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+.loading-overlay{position:fixed;inset:0;background:rgba(4,6,10,0.85);z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
+.loading-logo{font-family:'Cinzel',serif;font-size:32px;font-weight:900;letter-spacing:5px;color:var(--gold);text-shadow:0 0 30px rgba(201,168,76,0.4);}
+.loading-sub{font-size:14px;color:var(--textd);font-style:italic;}
+.spin{display:inline-block;width:32px;height:32px;border:2px solid rgba(201,168,76,0.2);border-top-color:var(--gold);border-radius:50%;animation:_spin 0.8s linear infinite;}
+@keyframes _spin{to{transform:rotate(360deg)}}
+
+/* ── MEDIA LIGHTBOX ── */
+.lightbox{position:fixed;inset:0;background:rgba(2,3,5,0.97);z-index:300;display:none;flex-direction:column;align-items:center;justify-content:center;}
+.lightbox.open{display:flex;}
+.lb-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:var(--text);width:36px;height:36px;border-radius:6px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.lb-close:hover{background:rgba(255,255,255,0.2);}
+.lb-content{max-width:90vw;max-height:85vh;border-radius:8px;overflow:hidden;}
+.lb-content img,.lb-content video{max-width:90vw;max-height:85vh;border-radius:8px;}
+.lb-info{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);background:rgba(10,15,24,0.9);border:1px solid var(--border2);border-radius:8px;padding:10px 20px;text-align:center;}
+.lb-info-title{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);}
+.lb-info-sub{font-size:12px;color:var(--textm);margin-top:3px;}
+
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--void)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--border2)}
+
+@media(max-width:1000px){
+  #page-globe{flex-direction:column;}
+  .globe-pane{min-height:400px;}
+  .globe-sidebar{width:100%;flex-direction:row;flex-wrap:wrap;border-left:none;border-top:1px solid var(--border);}
+}
+</style>
+</head>
+<body>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-logo">QUEST PACT</div>
+  <div class="spin"></div>
+  <div class="loading-sub">Entering the realm...</div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="navigate('globe')">⚔ QUEST PACT</div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="navigate('globe')">🌍 Realm</button>
+      <button class="nav-tab" onclick="navigate('quests')">⚔ Quests</button>
+      <button class="nav-tab" onclick="navigate('gallery')">🖼 Gallery</button>
+      <button class="nav-tab" onclick="navigate('trophies')">🏆 Trophies</button>
+      <button class="nav-tab" onclick="navigate('ledger')">💰 Ledger</button>
+      <button class="nav-tab" onclick="navigate('roster')">👥 Roster</button>
+    </div>
+    <div class="nav-right">
+      <div class="nav-user" id="navUser"></div>
+      <div id="playerSwitcher"></div>
+      <button class="logout-btn" onclick="logout()">Depart</button>
+    </div>
+  </div>
+</nav>
+
+<div class="app-body">
+  <!-- GLOBE -->
+  <div class="page active" id="page-globe">
+    <div class="globe-pane">
+      <canvas id="globeCanvas"></canvas>
+      <div class="globe-hud"><div class="globe-hud-title">The Known Realm</div></div>
+      <div class="globe-tooltip" id="globeTooltip">
+        <div class="globe-tooltip-name" id="ttName"></div>
+        <div class="globe-tooltip-sub" id="ttSub"></div>
+      </div>
+      <div class="quest-pin-popup" id="questPinPopup">
+        <button class="qpp-close" onclick="closeQuestPopup()">✕</button>
+        <div class="qpp-title" id="qppTitle"></div>
+        <div class="qpp-desc" id="qppDesc"></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="qpp-status" id="qppStatus"></span>
+          <button class="btn btn-gold btn-sm" id="qppGalleryBtn" onclick="goToQuestGallery()">View Gallery</button>
+          <button class="btn btn-ghost btn-sm" onclick="navigate('quests')">Quest Board</button>
+        </div>
+      </div>
+    </div>
+    <div class="globe-sidebar" id="globeSidebar"></div>
+  </div>
+
+  <!-- QUESTS -->
+  <div class="page" id="page-quests">
+    <div class="page-scroll">
+      <div class="page-hdr">
+        <div><div class="ph-title">Quest Board</div><div class="ph-sub">Trials set, debts owed, glory earned</div></div>
+        <button class="btn btn-gold" onclick="openNewQuestModal()">+ Assign Quest</button>
+      </div>
+      <div class="quest-grid" id="questGrid"></div>
+    </div>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="page" id="page-gallery">
+    <div class="page-scroll">
+      <div class="page-hdr">
+        <div><div class="ph-title">Proof Gallery</div><div class="ph-sub">Every trial documented</div></div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <select class="fsel" id="galleryFilter" style="width:auto" onchange="renderGallery()">
+            <option value="">All Quests</option>
+          </select>
+        </div>
+      </div>
+      <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
+  </div>
+
+  <!-- TROPHIES -->
+  <div class="page" id="page-trophies">
+    <div class="page-scroll">
+      <div class="page-hdr"><div><div class="ph-title">Hall of Trophies</div><div class="ph-sub">Relics of battles fought</div></div></div>
+      <div id="trophyContent"></div>
+    </div>
+  </div>
+
+  <!-- LEDGER -->
+  <div class="page" id="page-ledger">
+    <div class="page-scroll">
+      <div class="page-hdr">
+        <div><div class="ph-title">The Debt Ledger</div><div class="ph-sub">Gold promised, gold owed</div></div>
+        <button class="btn btn-ghost" onclick="openModal('addDebtModal')">+ Record</button>
+      </div>
+      <div id="ledgerContent"></div>
+    </div>
+  </div>
+
+  <!-- ROSTER -->
+  <div class="page" id="page-roster">
+    <div class="page-scroll">
+      <div class="page-hdr">
+        <div><div class="ph-title">Guild Roster</div><div class="ph-sub">All who have taken the Pact</div></div>
+        <button class="btn btn-rune" onclick="openModal('addPlayerModal')">+ Induct Member</button>
+      </div>
+      <div id="rosterContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MODALS ─────────────────────────────────────────── -->
+
+<!-- New Quest -->
+<div class="modal-bg" id="newQuestModal">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal('newQuestModal')">✕</button>
+    <div class="modal-title">⚔ Assign a Quest</div>
+    <div class="fg"><label class="flbl">Quest Title</label><input class="finp" id="qTitle" placeholder="Name the trial..."></div>
+    <div class="fg"><label class="flbl">Description & Requirements</label><textarea class="ftxt" id="qDesc" placeholder="What must be done, and what proof is required..."></textarea></div>
+    <div class="frow">
+      <div class="fg"><label class="flbl">Assign To</label><select class="fsel" id="qAssignee"></select></div>
+      <div class="fg"><label class="flbl">Given By</label><select class="fsel" id="qGiver"></select></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="flbl">Deadline</label><input type="date" class="finp" id="qDeadline"></div>
+      <div class="fg"><label class="flbl">Coins Reward</label><input type="number" class="finp" id="qReward" value="100" min="10" max="500"></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="flbl">Stakes (AUD)</label><input type="number" class="finp" id="qStakes" value="50" min="0"></div>
+      <div class="fg"><label class="flbl">Proof Required</label>
+        <select class="fsel" id="qProofType">
+          <option value="any">Any (photo, video, PDF, audio)</option>
+          <option value="photo">Photo only</option>
+          <option value="video">Video only</option>
+          <option value="written">Written report</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-gold btn-full" style="margin-top:6px" onclick="createQuest()">Seal the Quest</button>
+  </div>
+</div>
+
+<!-- Submit Proof -->
+<div class="modal-bg" id="submitProofModal">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal('submitProofModal')">✕</button>
+    <div class="modal-title">📜 Submit Proof</div>
+    <div id="proofQuestInfo" style="margin-bottom:14px"></div>
+    <div class="fg">
+      <label class="flbl">Proof File</label>
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('proofFile').click()" ondragover="ev(event,'add')" ondragleave="ev(event,'rem')" ondrop="handleDrop(event)">
+        <div class="upload-icon">📎</div>
+        <div class="upload-text">Click to upload or drag & drop</div>
+        <div class="upload-hint">Photo · Video · PDF · Audio · Max 100MB</div>
+      </div>
+      <input type="file" id="proofFile" style="display:none" accept="image/*,video/*,audio/*,.pdf" onchange="fileSelected(event)">
+      <div id="proofFilePrev" style="display:none"></div>
+    </div>
+    <div class="fg"><label class="flbl">Notes (optional)</label><textarea class="ftxt" id="proofNotes" placeholder="Any context..."></textarea></div>
+    <button class="btn btn-primary btn-full" id="submitProofBtn" onclick="submitProof()">Submit for Review</button>
+    <div class="fg" style="margin-top:8px"><div id="uploadProgress" style="display:none;font-size:12px;color:var(--textm)">Uploading...</div></div>
+  </div>
+</div>
+
+<!-- Review Proof -->
+<div class="modal-bg" id="reviewProofModal">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal('reviewProofModal')">✕</button>
+    <div class="modal-title">⚖ Review Proof</div>
+    <div id="reviewQuestInfo"></div>
+    <hr class="divider">
+    <div id="reviewProofContent"></div>
+    <hr class="divider">
+    <p style="font-size:13px;color:var(--textm);margin-bottom:14px;line-height:1.6">As quest-giver, approve or dispute this proof. Approve awards coins. Dispute notifies the arbitrator.</p>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-primary" style="flex:1" onclick="approveQuest()">✓ Approve</button>
+      <button class="btn btn-danger" style="flex:1" onclick="openDisputeFromReview()">⚑ Dispute</button>
+    </div>
+  </div>
+</div>
+
+<!-- Dispute -->
+<div class="modal-bg" id="disputeModal">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal('disputeModal')">✕</button>
+    <div class="modal-title">⚑ Raise a Dispute</div>
+    <div class="dispute-box" style="margin-bottom:14px">The arbitrator — your neutral judge — will review the evidence and make a binding ruling.</div>
+    <div class="fg"><label class="flbl">Reason</label><textarea class="ftxt" id="disputeReason" placeholder="Why is this proof insufficient..."></textarea></div>
+    <div class="fg"><label class="flbl">Arbitrator</label><select class="fsel" id="disputeArb"></select></div>
+    <button class="btn btn-danger btn-full" onclick="confirmDispute()">Send to Arbitrator</button>
+  </div>
+</div>
+
+<!-- Add Player -->
+<div class="modal-bg" id="addPlayerModal">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal('addPlayerModal')">✕</button>
+    <div class="modal-title">⚔ Induct Member</div>
+    <div class="frow">
+      <div class="fg"><label class="flbl">Name</label><input class="finp" id="pName" placeholder="Their name..."></div>
+      <div class="fg"><label class="flbl">Role</label>
+        <select class="fsel" id="pRole"><option value="player">Player</option><option value="arbitrator">Arbitrator</option></select>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="flbl">Country</label><input class="finp" id="pCountry" placeholder="Australia"></div>
+      <div class="fg"><label class="flbl">City</label><input class="finp" id="pCity" placeholder="Sydney"></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="flbl">Latitude</label><input type="number" class="finp" id="pLat" placeholder="-33.87" step="0.01"></div>
+      <div class="fg"><label class="flbl">Longitude</label><input type="number" class="finp" id="pLng" placeholder="151.21" step="0.01"></div>
+    </div>
+    <div class="fg"><label class="flbl">Avatar Color</label>
+      <select class="fsel" id="pColor">
+        <option value="#c9a84c,#7a5010">Gold</option>
+        <option value="#60a0ff,#1a3060">Rune Blue</option>
+        <option value="#ff6060,#601010">Crimson</option>
+        <option value="#40c070,#102a18">Emerald</option>
+        <option value="#b080ff,#3a1060">Arcane</option>
+        <option value="#ff9040,#601a08">Ember</option>
+      </select>
+    </div>
+    <button class="btn btn-rune btn-full" style="margin-top:6px" onclick="addPlayer()">Induct Member</button>
+  </div>
+</div>
+
+<!-- Add Debt -->
+<div class="modal-bg" id="addDebtModal">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal('addDebtModal')">✕</button>
+    <div class="modal-title">💰 Record Transaction</div>
+    <div class="frow">
+      <div class="fg"><label class="flbl">From</label><select class="fsel" id="dFrom"></select></div>
+      <div class="fg"><label class="flbl">To</label><select class="fsel" id="dTo"></select></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="flbl">Amount (AUD)</label><input type="number" class="finp" id="dAmt" placeholder="50" min="1"></div>
+      <div class="fg"><label class="flbl">Type</label>
+        <select class="fsel" id="dType">
+          <option value="stakes_loss">Stakes Loss</option>
+          <option value="stakes_win">Stakes Won</option>
+          <option value="payment">Payment Made</option>
+          <option value="manual">Manual</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg"><label class="flbl">Note</label><input class="finp" id="dNote" placeholder="Quest name or reason..."></div>
+    <button class="btn btn-gold btn-full" style="margin-top:6px" onclick="addDebt()">Record</button>
+  </div>
+</div>
+
+<!-- Media Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" onclick="closeLightbox()">✕</button>
+  <div class="lb-content" id="lbContent"></div>
+  <div class="lb-info" id="lbInfo"></div>
+</div>
+
+<!-- Toasts -->
+<div class="toast-wrap" id="toasts"></div>
+
+<script>
+// ═══════════════════════════════════════════
+//  AUTH GUARD
+// ═══════════════════════════════════════════
+const SESSION_PLAYER = sessionStorage.getItem('qp_player');
+const SESSION_TOKEN  = sessionStorage.getItem('qp_token');
+if (!SESSION_PLAYER || !SESSION_TOKEN) {
+  window.location.href = '/';
+}
+
+function logout() {
+  sessionStorage.clear();
+  window.location.href = '/';
+}
+
+// ═══════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════
+let state = {
+  players: [], quests: [], ledger: [],
+  nextQuestId: 1, nextLedgerId: 1
+};
+
+let saving = false;
+
+async function loadState() {
+  try {
+    const res = await fetch('/api/state');
+    state = await res.json();
+    if (!state.players) state.players = [];
+    if (!state.quests)  state.quests  = [];
+    if (!state.ledger)  state.ledger  = [];
+  } catch(e) { toast('Failed to load state from server', 'err'); }
+}
+
+async function saveState() {
+  if (saving) return;
+  saving = true;
+  try {
+    await fetch('/api/state', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(state)
+    });
+  } catch(e) { toast('Save failed — changes may not persist', 'err'); }
+  finally { saving = false; }
+}
+
+// ═══════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════
+async function init() {
+  await loadState();
+  renderNavUser();
+  renderPlayerSwitcher();
+  checkAutoFails();
+  checkTrophies();
+  renderPage('globe');
+  document.getElementById('loadingOverlay').style.display = 'none';
+}
+
+function renderNavUser() {
+  const p = getPlayer(SESSION_PLAYER);
+  if (p) document.getElementById('navUser').textContent = p.name.toUpperCase();
+}
+
+// ═══════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════
+let currentPage = 'globe';
+
+function navigate(page) {
+  currentPage = page;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  const pages = ['globe','quests','gallery','trophies','ledger','roster'];
+  const tabs = document.querySelectorAll('.nav-tab');
+  const idx = pages.indexOf(page);
+  if (tabs[idx]) tabs[idx].classList.add('active');
+  renderPage(page);
+}
+
+function renderPage(page) {
+  if (page === 'globe')    renderGlobe();
+  if (page === 'quests')   renderQuests();
+  if (page === 'gallery')  renderGallery();
+  if (page === 'trophies') renderTrophies();
+  if (page === 'ledger')   renderLedger();
+  if (page === 'roster')   renderRoster();
+}
+
+// ═══════════════════════════════════════════
+//  PLAYER SWITCHER
+// ═══════════════════════════════════════════
+function renderPlayerSwitcher() {
+  const el = document.getElementById('playerSwitcher');
+  el.innerHTML = state.players.filter(p => p.role === 'player').map(p => {
+    const [fg, bg] = p.color.split(',');
+    const active = p.id === SESSION_PLAYER;
+    return `<div class="player-pill ${active ? 'active' : ''}" onclick="switchView('${p.id}')">
+      <div class="pav" style="background:${bg}20;color:${fg};border:1px solid ${fg}40">${p.name[0]}</div>
+      ${p.name}
+    </div>`;
+  }).join('');
+}
+
+// View switching — changes which player's perspective we see (not auth)
+let viewPlayerId = SESSION_PLAYER;
+function switchView(id) {
+  viewPlayerId = id;
+  renderPlayerSwitcher();
+  renderPage(currentPage);
+}
+
+// ═══════════════════════════════════════════
+//  GLOBE — REAL EARTH TILES
+// ═══════════════════════════════════════════
+let globeScene, globeCamera, globeRenderer, globeAnimId;
+let globeObjects = []; // clickable quest pins
+let activeQuestPopupId = null;
+
+function renderGlobe() {
+  renderGlobeSidebar();
+  initGlobe();
+}
+
+function renderGlobeSidebar() {
+  const el = document.getElementById('globeSidebar');
+  el.innerHTML = state.players.map(p => playerCardHTML(p)).join('');
+}
+
+function initGlobe() {
+  const canvas = document.getElementById('globeCanvas');
+  const container = canvas.parentElement;
+  if (globeAnimId) cancelAnimationFrame(globeAnimId);
+  if (globeRenderer) globeRenderer.dispose();
+  globeObjects = [];
+
+  const W = container.clientWidth, H = container.clientHeight || 600;
+  globeScene = new THREE.Scene();
+  globeCamera = new THREE.PerspectiveCamera(45, W / H, 0.1, 1000);
+  globeCamera.position.z = 2.6;
+
+  globeRenderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  globeRenderer.setSize(W, H);
+  globeRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  globeRenderer.setClearColor(0x000000, 0);
+
+  // Lights
+  globeScene.add(new THREE.AmbientLight(0x334466, 1.2));
+  const sun = new THREE.DirectionalLight(0xfff5e0, 1.4);
+  sun.position.set(3, 2, 2);
+  globeScene.add(sun);
+
+  // Stars
+  const sverts = [];
+  for (let i = 0; i < 4000; i++) {
+    const th = Math.random()*Math.PI*2, ph = Math.acos(2*Math.random()-1), r = 10+Math.random()*4;
+    sverts.push(r*Math.sin(ph)*Math.cos(th), r*Math.cos(ph), r*Math.sin(ph)*Math.sin(th));
+  }
+  const sGeo = new THREE.BufferGeometry();
+  sGeo.setAttribute('position', new THREE.Float32BufferAttribute(sverts, 3));
+  globeScene.add(new THREE.Points(sGeo, new THREE.PointsMaterial({ color: 0xaabbdd, size: 0.018, transparent: true, opacity: 0.7 })));
+
+  // Earth globe with real texture from NASA Blue Marble
+  const earthGeo = new THREE.SphereGeometry(1, 64, 64);
+  const textureLoader = new THREE.TextureLoader();
+
+  // Use ESRI/ArcGIS world imagery (publicly accessible tile)
+  // We'll create a canvas-based texture with continents drawn
+  const earthCanvas = createEarthCanvas();
+  const earthTex = new THREE.CanvasTexture(earthCanvas);
+
+  const earthMat = new THREE.MeshPhongMaterial({
+    map: earthTex,
+    specular: new THREE.Color(0x112233),
+    shininess: 12,
+    emissive: new THREE.Color(0x001122),
+    emissiveIntensity: 0.15
+  });
+  const earth = new THREE.Mesh(earthGeo, earthMat);
+  globeScene.add(earth);
+
+  // Atmosphere
+  const atmMat = new THREE.MeshPhongMaterial({
+    color: 0x1a6ab0, transparent: true, opacity: 0.09,
+    side: THREE.FrontSide, depthWrite: false
+  });
+  globeScene.add(new THREE.Mesh(new THREE.SphereGeometry(1.06, 32, 32), atmMat));
+
+  // Atmosphere rim
+  const rimMat = new THREE.MeshPhongMaterial({
+    color: 0x4090d0, transparent: true, opacity: 0.05,
+    side: THREE.BackSide
+  });
+  globeScene.add(new THREE.Mesh(new THREE.SphereGeometry(1.1, 32, 32), rimMat));
+
+  // Player pins
+  state.players.forEach(p => {
+    const [fg] = p.color.split(',');
+    const col = parseInt(fg.replace('#',''), 16);
+    const pos = ll2v(p.lat, p.lng, 1.012);
+
+    // Pin sphere
+    const pin = new THREE.Mesh(
+      new THREE.SphereGeometry(0.016, 16, 16),
+      new THREE.MeshBasicMaterial({ color: col })
+    );
+    pin.position.copy(pos);
+    pin.userData = { type: 'player', player: p };
+    globeScene.add(pin);
+    globeObjects.push(pin);
+
+    // Pulse ring
+    const ring = new THREE.Mesh(
+      new THREE.RingGeometry(0.020, 0.026, 32),
+      new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.6, side: THREE.DoubleSide })
+    );
+    ring.position.copy(pos);
+    ring.lookAt(new THREE.Vector3(0,0,0));
+    ring.userData = { isPulse: true };
+    globeScene.add(ring);
+  });
+
+  // Quest pins — placed at assignee's location, coloured by status
+  state.quests.filter(q => q.status !== 'completed' && q.status !== 'failed').forEach(q => {
+    const assignee = getPlayer(q.assigneeId);
+    if (!assignee) return;
+    const statusColors = {
+      active: 0x60a0ff, pending_proof: 0xff8040,
+      awaiting_review: 0xc9a84c, disputed: 0xd47020
+    };
+    const col = statusColors[q.status] || 0xffffff;
+    const offset = Math.random() * 0.03 - 0.015; // slight offset so pins don't stack
+    const pos = ll2v(assignee.lat + offset, assignee.lng + offset, 1.025);
+
+    const qpin = new THREE.Mesh(
+      new THREE.ConeGeometry(0.012, 0.035, 8),
+      new THREE.MeshBasicMaterial({ color: col })
+    );
+    qpin.position.copy(pos);
+    // Point outward from globe surface
+    qpin.lookAt(new THREE.Vector3(0,0,0));
+    qpin.rotateX(Math.PI);
+    qpin.userData = { type: 'quest', quest: q };
+    globeScene.add(qpin);
+    globeObjects.push(qpin);
+  });
+
+  // Arc between players
+  if (state.players.length >= 2) {
+    const p1 = state.players[0], p2 = state.players[1];
+    const v1 = ll2v(p1.lat, p1.lng, 1.012), v2 = ll2v(p2.lat, p2.lng, 1.012);
+    const arcPts = [];
+    for (let t = 0; t <= 1; t += 0.015) {
+      const v = new THREE.Vector3().lerpVectors(v1, v2, t);
+      v.normalize().multiplyScalar(1.0 + 0.5 * Math.sin(Math.PI * t));
+      arcPts.push(v);
+    }
+    const arcGeo = new THREE.BufferGeometry().setFromPoints(arcPts);
+    globeScene.add(new THREE.Line(arcGeo, new THREE.LineBasicMaterial({
+      color: 0xc9a84c, transparent: true, opacity: 0.45
+    })));
+  }
+
+  // Mouse controls
+  let isDragging = false, prevX = 0, prevY = 0;
+  let rotY = 0, rotX = 0.2;
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+
+  canvas.addEventListener('mousedown', e => {
+    isDragging = false;
+    prevX = e.clientX; prevY = e.clientY;
+  });
+  canvas.addEventListener('mousemove', e => {
+    const dx = e.clientX - prevX, dy = e.clientY - prevY;
+    if (Math.abs(dx) > 2 || Math.abs(dy) > 2) {
+      isDragging = true;
+      rotY += dx * 0.005;
+      rotX += dy * 0.003;
+      rotX = Math.max(-1.2, Math.min(1.2, rotX));
+      prevX = e.clientX; prevY = e.clientY;
+    }
+    // Hover tooltip
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera(mouse, globeCamera);
+    const hits = raycaster.intersectObjects(globeObjects);
+    const tt = document.getElementById('globeTooltip');
+    if (hits.length) {
+      const obj = hits[0].object;
+      const d = obj.userData;
+      tt.style.display = 'block';
+      tt.style.left = (e.clientX - rect.left + 14) + 'px';
+      tt.style.top  = (e.clientY - rect.top - 10) + 'px';
+      if (d.type === 'player') {
+        document.getElementById('ttName').textContent = d.player.name;
+        document.getElementById('ttSub').textContent = `${d.player.city}, ${d.player.country} · ${d.player.coins} coins`;
+      } else if (d.type === 'quest') {
+        document.getElementById('ttName').textContent = d.quest.title;
+        document.getElementById('ttSub').textContent = `${d.quest.status} · ${getPlayer(d.quest.assigneeId)?.name}`;
+      }
+      canvas.style.cursor = 'pointer';
+    } else {
+      tt.style.display = 'none';
+      canvas.style.cursor = isDragging ? 'grabbing' : 'grab';
+    }
+  });
+
+  canvas.addEventListener('click', e => {
+    if (isDragging) return;
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera(mouse, globeCamera);
+    const hits = raycaster.intersectObjects(globeObjects);
+    if (hits.length) {
+      const d = hits[0].object.userData;
+      if (d.type === 'quest') showQuestPopup(d.quest, e.clientX, e.clientY, rect);
+    } else {
+      closeQuestPopup();
+    }
+  });
+
+  // Scroll zoom
+  canvas.addEventListener('wheel', e => {
+    globeCamera.position.z = Math.max(1.4, Math.min(5, globeCamera.position.z + e.deltaY * 0.003));
+  });
+
+  window.addEventListener('resize', () => {
+    const W = container.clientWidth, H = container.clientHeight;
+    globeCamera.aspect = W / H;
+    globeCamera.updateProjectionMatrix();
+    globeRenderer.setSize(W, H);
+  });
+
+  let t = 0;
+  function animate() {
+    globeAnimId = requestAnimationFrame(animate);
+    t += 0.016;
+    if (!isDragging) rotY += 0.0006;
+    earth.rotation.y = rotY; earth.rotation.x = rotX;
+    // Sync pins
+    globeObjects.forEach(o => {
+      const orig = o.userData._origRot;
+    });
+    // Pulse rings
+    globeScene.children.forEach(c => {
+      if (c.userData.isPulse) {
+        const s = 1 + 0.35 * Math.sin(t * 1.8);
+        c.scale.setScalar(s);
+        c.material.opacity = 0.6 - 0.35 * Math.abs(Math.sin(t * 1.8));
+        c.rotation.y = rotY; c.rotation.x = rotX;
+      }
+    });
+    // Rotate pin group with earth
+    globeObjects.forEach(o => {
+      if (o.userData._basePos) {
+        const rotMat = new THREE.Matrix4().makeRotationY(rotY).multiply(new THREE.Matrix4().makeRotationX(rotX));
+        o.position.copy(o.userData._basePos.clone().applyMatrix4(rotMat));
+      }
+    });
+    globeRenderer.render(globeScene, globeCamera);
+  }
+
+  // Store base positions for pin rotation
+  globeObjects.forEach(o => { o.userData._basePos = o.position.clone(); });
+
+  animate();
+}
+
+function showQuestPopup(quest, cx, cy, rect) {
+  activeQuestPopupId = quest.id;
+  const popup = document.getElementById('questPinPopup');
+  document.getElementById('qppTitle').textContent = quest.title;
+  document.getElementById('qppDesc').textContent = quest.description.substring(0, 100) + (quest.description.length > 100 ? '...' : '');
+  const badgeTxt = { active:'Active', pending_proof:'Proof Needed', awaiting_review:'Under Review', disputed:'Disputed' };
+  document.getElementById('qppStatus').innerHTML = `<span class="qbadge b-${quest.status}">${badgeTxt[quest.status]||quest.status}</span>`;
+  document.getElementById('qppGalleryBtn').style.display = quest.proofUrl ? 'inline-flex' : 'none';
+
+  popup.style.display = 'block';
+  const px = Math.min(cx - rect.left + 16, rect.width - 280);
+  const py = Math.min(cy - rect.top, rect.height - 200);
+  popup.style.left = px + 'px';
+  popup.style.top  = py + 'px';
+}
+
+function closeQuestPopup() {
+  document.getElementById('questPinPopup').style.display = 'none';
+  activeQuestPopupId = null;
+}
+
+function goToQuestGallery() {
+  if (activeQuestPopupId) {
+    navigate('gallery');
+    document.getElementById('galleryFilter').value = activeQuestPopupId;
+    renderGallery();
+    closeQuestPopup();
+  }
+}
+
+// ── CANVAS EARTH ───────────────────────────────────────────────────────────────
+// Renders a high-detail Earth using canvas 2D with real continent shapes via fetch
+function createEarthCanvas() {
+  const size = 2048;
+  const canvas = document.createElement('canvas');
+  canvas.width = size; canvas.height = size / 2;
+  const ctx = canvas.getContext('2d');
+
+  // Ocean gradient
+  const oceanGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  oceanGrad.addColorStop(0,   '#0a1f3a');
+  oceanGrad.addColorStop(0.3, '#0d2a4e');
+  oceanGrad.addColorStop(0.7, '#0d2a4e');
+  oceanGrad.addColorStop(1,   '#0a1f3a');
+  ctx.fillStyle = oceanGrad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Ocean texture — subtle noise
+  for (let i = 0; i < 12000; i++) {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height;
+    ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.015})`;
+    ctx.fillRect(x, y, 1, 1);
+  }
+
+  // Project lat/lng to canvas x/y
+  const project = (lat, lng) => ({
+    x: ((lng + 180) / 360) * canvas.width,
+    y: ((90 - lat) / 180) * canvas.height
+  });
+
+  // Draw a land mass from array of [lat,lng] points
+  function drawLand(points, fillStyle) {
+    ctx.beginPath();
+    points.forEach((pt, i) => {
+      const {x, y} = project(pt[0], pt[1]);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.closePath();
+    ctx.fillStyle = fillStyle;
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(180,200,160,0.15)';
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+  }
+
+  const landFill = (elev) => {
+    const g = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    if (elev === 'high') {
+      g.addColorStop(0, '#3a5a30'); g.addColorStop(1, '#2a4020');
+    } else if (elev === 'desert') {
+      g.addColorStop(0, '#7a6a30'); g.addColorStop(1, '#5a4a20');
+    } else {
+      g.addColorStop(0, '#2d4a22'); g.addColorStop(1, '#1e3518');
+    }
+    return g;
+  };
+
+  // Major continent outlines (simplified but recognisable)
+  // North America
+  drawLand([
+    [70,-140],[72,-125],[70,-85],[60,-64],[46,-53],[43,-66],[36,-75],[25,-80],[24,-90],[26,-97],[22,-105],
+    [30,-110],[32,-117],[38,-122],[48,-124],[54,-130],[60,-140],[65,-168],[70,-160],[72,-140]
+  ], landFill('normal'));
+
+  // Greenland
+  drawLand([
+    [83,-70],[78,-18],[72,-22],[65,-40],[60,-45],[65,-55],[72,-68],[80,-68],[83,-50],[83,-70]
+  ], landFill('high'));
+
+  // South America
+  drawLand([
+    [12,-72],[10,-62],[8,-60],[0,-50],[-5,-35],[-10,-38],[-23,-43],[-34,-53],[-42,-63],[-52,-68],
+    [-55,-65],[-55,-67],[-42,-72],[-30,-70],[-18,-70],[-5,-80],[8,-78],[12,-72]
+  ], landFill('normal'));
+
+  // Europe
+  drawLand([
+    [71,28],[70,19],[60,5],[51,2],[44,8],[36,5],[36,28],[45,35],[52,30],[60,25],[65,14],[71,28]
+  ], landFill('normal'));
+
+  // Scandinavia
+  drawLand([
+    [71,28],[70,25],[65,14],[58,5],[57,8],[60,11],[65,14],[68,18],[70,25],[71,28]
+  ], landFill('normal'));
+
+  // Africa
+  drawLand([
+    [37,10],[37,37],[20,42],[11,44],[0,42],[-10,40],[-18,36],[-34,26],[-34,18],[-20,12],
+    [-10,14],[0,8],[4,-2],[8,-2],[14,-17],[16,-15],[20,-17],[15,-17],[8,-14],[4,-8],
+    [4,2],[5,4],[14,14],[20,37],[30,32],[37,10]
+  ], landFill('normal'));
+
+  // Asia (simplified)
+  drawLand([
+    [70,30],[72,80],[70,140],[60,140],[40,130],[22,120],[10,105],[0,105],[5,100],
+    [14,80],[22,60],[28,48],[44,38],[40,28],[52,28],[60,50],[72,60],[70,30]
+  ], landFill('normal'));
+
+  // India
+  drawLand([
+    [28,72],[28,88],[20,88],[8,78],[8,77],[20,72],[28,72]
+  ], landFill('normal'));
+
+  // Japan (simplified)
+  drawLand([
+    [42,142],[36,136],[34,132],[32,131],[34,136],[38,141],[42,142]
+  ], landFill('normal'));
+
+  // Australia
+  drawLand([
+    [-14,130],[-14,136],[-18,146],[-28,154],[-38,147],[-38,140],[-32,126],[-22,114],
+    [-18,122],[-14,130]
+  ], landFill('desert'));
+
+  // Antarctic
+  drawLand([
+    [-66,0],[-70,60],[-72,120],[-70,180],[-72,240],[-68,300],[-66,360],[-66,0]
+  ], landFill('high'));
+
+  // Ice cap at poles
+  const iceGrad = ctx.createRadialGradient(canvas.width/2, 0, 0, canvas.width/2, 0, canvas.height * 0.15);
+  iceGrad.addColorStop(0, 'rgba(230,245,255,0.9)');
+  iceGrad.addColorStop(1, 'rgba(200,225,255,0)');
+  ctx.fillStyle = iceGrad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height * 0.15);
+
+  // Grid lines (lat/lng) subtle
+  ctx.strokeStyle = 'rgba(100,150,200,0.08)';
+  ctx.lineWidth = 0.5;
+  for (let lng = -180; lng <= 180; lng += 30) {
+    const {x} = project(0, lng);
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+  }
+  for (let lat = -90; lat <= 90; lat += 30) {
+    const {y} = project(lat, 0);
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+  }
+
+  // Cloud layer (sparse)
+  for (let i = 0; i < 600; i++) {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height;
+    const r = 8 + Math.random() * 40;
+    const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
+    grad.addColorStop(0, 'rgba(255,255,255,0.06)');
+    grad.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(x - r, y - r, r * 2, r * 2);
+  }
+
+  return canvas;
+}
+
+function ll2v(lat, lng, r = 1) {
+  const phi = (90 - lat) * (Math.PI / 180);
+  const theta = (lng + 180) * (Math.PI / 180);
+  return new THREE.Vector3(
+    -r * Math.sin(phi) * Math.cos(theta),
+    r * Math.cos(phi),
+    r * Math.sin(phi) * Math.sin(theta)
+  );
+}
+
+// ═══════════════════════════════════════════
+//  PLAYERS
+// ═══════════════════════════════════════════
+function getPlayer(id) { return state.players.find(p => p.id === id); }
+function getLevel(p)   { return Math.floor(Math.sqrt(p.xp / 100)) + 1; }
+function getXpNext(p)  { const l = getLevel(p); return l * l * 100; }
+function getRank(lv)   {
+  return ['Peasant','Wanderer','Squire','Knight','Champion','Lord','Duke','King','Emperor','Legend'][Math.min(lv-1,9)];
+}
+function getFlag(c)    {
+  return {'Australia':'🇦🇺','Canada':'🇨🇦','USA':'🇺🇸','UK':'🇬🇧','India':'🇮🇳','Germany':'🇩🇪','New Zealand':'🇳🇿','France':'🇫🇷'}[c] || '🌍';
+}
+
+function playerCardHTML(p) {
+  const [fg, bg] = p.color.split(',');
+  const lv = getLevel(p), xpn = getXpNext(p);
+  const pct = Math.min(100, (p.xp / xpn) * 100);
+  return `<div class="card">
+    <div class="pc-head">
+      <div class="pc-av" style="background:${bg}30;color:${fg};border-color:${fg}60">${p.name[0]}</div>
+      <div>
+        <div class="pc-name">${p.name} <span>${getFlag(p.country)}</span></div>
+        <div class="pc-loc">${p.city}, ${p.country}</div>
+        <div class="pc-rank">${getRank(lv)} · Lv ${lv}</div>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="sbox"><div class="sval" style="color:${fg}">${p.coins}</div><div class="slbl">Coins</div></div>
+      <div class="sbox"><div class="sval">${p.questsCompleted}</div><div class="slbl">Done</div></div>
+      <div class="sbox"><div class="sval" style="color:#ff8080">${p.questsFailed}</div><div class="slbl">Failed</div></div>
+    </div>
+    <div class="xpbar">
+      <div class="xpbar-lbl"><span>${p.xp} XP</span><span>${xpn - p.xp} to next</span></div>
+      <div class="xpbar-track"><div class="xpbar-fill" style="width:${pct}%;background:linear-gradient(90deg,${bg},${fg})"></div></div>
+    </div>
+    ${p.role === 'arbitrator' ? '<div style="margin-top:8px;font-size:11px;color:var(--rune2);text-align:center;letter-spacing:1px">⚖ ARBITRATOR</div>' : ''}
+  </div>`;
+}
+
+// ═══════════════════════════════════════════
+//  QUESTS
+// ═══════════════════════════════════════════
+let activeQuestId = null;
+let currentProofFile = null;
+
+function renderQuests() {
+  const el = document.getElementById('questGrid');
+  if (!state.quests.length) {
+    el.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">⚔️</div><div class="empty-text">No quests yet.</div></div>`;
+    return;
+  }
+  const order = { active:0, pending_proof:1, awaiting_review:2, disputed:3, completed:4, failed:5 };
+  const sorted = [...state.quests].sort((a,b) => (order[a.status]??9) - (order[b.status]??9));
+  el.innerHTML = sorted.map(q => questCardHTML(q)).join('');
+}
+
+function questCardHTML(q) {
+  const assignee = getPlayer(q.assigneeId), giver = getPlayer(q.giverId);
+  const [afg] = (assignee?.color||'#c9a84c,#333').split(',');
+  const [gfg] = (giver?.color||'#60a0ff,#333').split(',');
+  const now = new Date(), dl = new Date(q.deadline);
+  const daysLeft = Math.ceil((dl - now) / 86400000);
+  let dlCls = 'dl-ok', dlTxt = `${daysLeft}d left`;
+  if (q.status === 'completed'||q.status === 'failed') { dlCls='dl-past'; dlTxt='Ended'; }
+  else if (daysLeft < 0)  { dlCls='dl-past'; dlTxt='Overdue'; }
+  else if (daysLeft === 0){ dlCls='dl-crit'; dlTxt='Due today!'; }
+  else if (daysLeft <= 2) { dlCls='dl-crit'; dlTxt=`${daysLeft}d left!`; }
+  else if (daysLeft <= 4) { dlCls='dl-soon'; }
+
+  const badge = { active:'Active', pending_proof:'Proof Needed', awaiting_review:'Under Review', completed:'Completed', failed:'Failed', disputed:'Disputed' };
+
+  const me = SESSION_PLAYER;
+  let actions = '';
+  if (q.status === 'active' && me === q.assigneeId)
+    actions += `<button class="btn btn-primary btn-sm" onclick="openSubmitProof('${q.id}')">Submit Proof</button>`;
+  if (q.status === 'awaiting_review' && me === q.giverId)
+    actions += `<button class="btn btn-gold btn-sm" onclick="openReviewProof('${q.id}')">Review Proof</button>`;
+  if ((q.status === 'active'||q.status === 'awaiting_review') && (me === q.giverId))
+    actions += `<button class="btn btn-ghost btn-sm" onclick="openDispute('${q.id}')">Raise Dispute</button>`;
+  if (q.status === 'active' && daysLeft < 0 && me === q.giverId)
+    actions += `<button class="btn btn-danger btn-sm" onclick="markFailed('${q.id}')">Mark Failed</button>`;
+
+  const proofThumb = q.proofUrl ? `
+    <div class="proof-thumb" onclick="openMedia('${q.proofUrl}','${q.title}','${q.proofNote||''}')">
+      ${proofIcon(q.proofUrl)} <span>${q.proofNote || 'View proof'}</span>
+    </div>` : '';
+
+  return `<div class="qcard s-${q.status}">
+    <div class="qcard-head">
+      <span class="qbadge b-${q.status}">${badge[q.status]||q.status}</span>
+      <span class="qdeadline ${dlCls}">⏳ ${dlTxt}</span>
+    </div>
+    <div class="qtitle">${q.title}</div>
+    <div class="qdesc">${q.description}</div>
+    <div class="qmeta">
+      <span>⚔ <span style="color:${afg}">${assignee?.name||'?'}</span></span>
+      <span>📜 <span style="color:${gfg}">${giver?.name||'?'}</span></span>
+      <span>🪙 ${q.reward}</span>
+      ${q.stakes?`<span>💰 $${q.stakes}</span>`:''}
+    </div>
+    ${q.disputeReason?`<div class="dispute-box" style="margin-bottom:8px;font-size:12px">⚑ ${q.disputeReason}</div>`:''}
+    ${proofThumb}
+    ${actions?`<div class="qactions">${actions}</div>`:''}
+  </div>`;
+}
+
+function proofIcon(url) {
+  if (!url) return '📎';
+  const u = url.toLowerCase();
+  if (u.includes('.mp4')||u.includes('.mov')||u.includes('.webm')) return '🎬';
+  if (u.includes('.mp3')||u.includes('.wav')||u.includes('.ogg')||u.includes('.m4a')) return '🎵';
+  if (u.includes('.pdf')) return '📄';
+  return '🖼';
+}
+
+function openNewQuestModal() {
+  fillSelect('qAssignee'); fillSelect('qGiver');
+  // Pre-select: current player as giver, other as assignee
+  const others = state.players.filter(p => p.id !== SESSION_PLAYER && p.role === 'player');
+  if (others.length) document.getElementById('qAssignee').value = others[0].id;
+  document.getElementById('qGiver').value = SESSION_PLAYER;
+  const d = new Date(); d.setDate(d.getDate() + 7);
+  document.getElementById('qDeadline').value = d.toISOString().split('T')[0];
+  openModal('newQuestModal');
+}
+
+async function createQuest() {
+  const title    = v('qTitle'), desc = v('qDesc');
+  const assignee = v('qAssignee'), giver = v('qGiver');
+  const deadline = v('qDeadline'), reward = parseInt(v('qReward'))||100;
+  const stakes   = parseFloat(v('qStakes'))||0;
+
+  if (!title||!desc||!deadline) { toast('Fill in all required fields', 'err'); return; }
+  if (assignee === giver) { toast('Assignee and giver must differ', 'err'); return; }
+
+  const q = {
+    id: 'q' + state.nextQuestId++, title, description: desc,
+    assigneeId: assignee, giverId: giver, deadline, reward, stakes,
+    status: 'active', proofUrl: null, proofNote: null, disputeReason: null,
+    createdAt: new Date().toISOString(), completedAt: null
+  };
+  state.quests.push(q);
+  const gp = getPlayer(giver); if (gp) gp.questsGiven++;
+
+  await saveState();
+  checkTrophies();
+  closeModal('newQuestModal');
+  clearForm(['qTitle','qDesc']);
+  renderQuests();
+  if (currentPage === 'globe') initGlobe();
+  toast(`Quest assigned to ${getPlayer(assignee)?.name}`, 'ok');
+}
+
+function openSubmitProof(qid) {
+  activeQuestId = qid;
+  const q = state.quests.find(q => q.id === qid);
+  document.getElementById('proofQuestInfo').innerHTML = `<div class="qtitle">${q.title}</div><div class="qdesc" style="margin-top:4px">${q.description}</div>`;
+  document.getElementById('proofNotes').value = '';
+  document.getElementById('proofFilePrev').style.display = 'none';
+  document.getElementById('proofFile').value = '';
+  document.getElementById('uploadProgress').style.display = 'none';
+  currentProofFile = null;
+  openModal('submitProofModal');
+}
+
+function ev(e, action) { e.preventDefault(); document.getElementById('uploadZone').classList[action === 'add' ? 'add' : 'remove']('drag'); }
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('drag');
+  const f = e.dataTransfer.files[0];
+  if (f) { currentProofFile = f; showFilePrev(f); }
+}
+
+function fileSelected(e) {
+  const f = e.target.files[0];
+  if (f) { currentProofFile = f; showFilePrev(f); }
+}
+
+function showFilePrev(f) {
+  const el = document.getElementById('proofFilePrev');
+  el.style.display = 'flex';
+  el.className = 'proof-prev';
+  const ico = f.type.startsWith('image')?'🖼':f.type.startsWith('video')?'🎬':f.type.startsWith('audio')?'🎵':'📄';
+  el.innerHTML = `${ico} <strong>${f.name}</strong> <span style="color:var(--textd)">(${(f.size/1048576).toFixed(1)}MB)</span>`;
+}
+
+async function submitProof() {
+  const q = state.quests.find(q => q.id === activeQuestId);
+  if (!q) return;
+  const notes = v('proofNotes');
+
+  let proofUrl = null;
+  let proofNote = notes || 'Proof submitted';
+
+  if (currentProofFile) {
+    document.getElementById('uploadProgress').style.display = 'block';
+    document.getElementById('uploadProgress').textContent = 'Uploading file...';
+    document.getElementById('submitProofBtn').disabled = true;
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: {
+          'Content-Type': currentProofFile.type,
+          'X-Quest-Id': q.id,
+          'X-Player-Id': SESSION_PLAYER
+        },
+        body: currentProofFile
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      proofUrl = data.url;
+      proofNote = currentProofFile.name + (notes ? ' — ' + notes : '');
+    } catch(e) {
+      toast('Upload failed: ' + e.message, 'err');
+      document.getElementById('uploadProgress').style.display = 'none';
+      document.getElementById('submitProofBtn').disabled = false;
+      return;
+    }
+  }
+
+  q.status = 'awaiting_review';
+  q.proofUrl = proofUrl;
+  q.proofNote = proofNote;
+  q.proofSubmittedAt = new Date().toISOString();
+
+  await saveState();
+  document.getElementById('submitProofBtn').disabled = false;
+  document.getElementById('uploadProgress').style.display = 'none';
+  closeModal('submitProofModal');
+  renderQuests();
+  toast('Proof submitted for review', 'ok');
+}
+
+function openReviewProof(qid) {
+  activeQuestId = qid;
+  const q = state.quests.find(q => q.id === qid);
+  document.getElementById('reviewQuestInfo').innerHTML = `<div class="qtitle">${q.title}</div><div class="qdesc" style="margin-top:4px">${q.description}</div>`;
+  let proofHTML = '';
+  if (q.proofUrl) {
+    const url = q.proofUrl;
+    const isImg = /\.(jpg|jpeg|png|gif|webp)(\?|$)/i.test(url);
+    const isVid = /\.(mp4|mov|webm)(\?|$)/i.test(url);
+    const isAud = /\.(mp3|wav|ogg|m4a)(\?|$)/i.test(url);
+    if (isImg)      proofHTML = `<img src="${url}" style="max-width:100%;border-radius:6px;margin-bottom:8px;cursor:pointer" onclick="openMedia('${url}','${q.title}','')">`;
+    else if (isVid) proofHTML = `<video src="${url}" controls style="max-width:100%;border-radius:6px;margin-bottom:8px"></video>`;
+    else if (isAud) proofHTML = `<audio src="${url}" controls style="width:100%;margin-bottom:8px"></audio>`;
+    else            proofHTML = `<a href="${url}" target="_blank" class="btn btn-ghost btn-sm" style="margin-bottom:8px">📄 View File</a>`;
+  }
+  document.getElementById('reviewProofContent').innerHTML = `
+    <div class="flbl" style="margin-bottom:8px">Submitted Proof</div>
+    ${proofHTML}
+    <div class="proof-prev" style="cursor:default">${proofIcon(q.proofUrl)} ${q.proofNote||'No file attached'}</div>`;
+  openModal('reviewProofModal');
+}
+
+async function approveQuest() {
+  const q = state.quests.find(q => q.id === activeQuestId);
+  if (!q) return;
+  q.status = 'completed'; q.completedAt = new Date().toISOString();
+  const p = getPlayer(q.assigneeId);
+  if (p) { p.xp += q.reward; p.coins += q.reward; p.questsCompleted++; }
+  if (q.stakes > 0) {
+    state.ledger.push({ id:'l'+state.nextLedgerId++, from:q.giverId, to:q.assigneeId, amount:q.stakes, type:'stakes_win', note:`Quest: ${q.title}`, date:new Date().toISOString() });
+  }
+  await saveState(); checkTrophies(); closeModal('reviewProofModal');
+  renderQuests(); toast(`Quest approved! +${q.reward} coins to ${p?.name}`, 'ok');
+  if (currentPage === 'globe') initGlobe();
+}
+
+function openDisputeFromReview() { closeModal('reviewProofModal'); openDispute(activeQuestId); }
+
+function openDispute(qid) {
+  activeQuestId = qid;
+  const arbs = state.players.filter(p => p.role === 'arbitrator');
+  document.getElementById('disputeArb').innerHTML = arbs.length
+    ? arbs.map(a => `<option value="${a.id}">${a.name}</option>`).join('')
+    : '<option value="">No arbitrator — add one in Roster</option>';
+  document.getElementById('disputeReason').value = '';
+  openModal('disputeModal');
+}
+
+async function confirmDispute() {
+  const q = state.quests.find(q => q.id === activeQuestId);
+  if (!q) return;
+  const reason = v('disputeReason');
+  if (!reason) { toast('Provide a reason', 'err'); return; }
+  q.status = 'disputed'; q.disputeReason = reason;
+  await saveState(); closeModal('disputeModal'); renderQuests();
+  toast('Dispute raised — arbitrator notified', 'ok');
+}
+
+async function markFailed(qid) {
+  const q = state.quests.find(q => q.id === qid); if (!q) return;
+  q.status = 'failed';
+  const p = getPlayer(q.assigneeId);
+  if (p) { p.coins = Math.max(0, p.coins - Math.floor(q.reward * 0.5)); p.questsFailed++; }
+  if (q.stakes > 0) {
+    state.ledger.push({ id:'l'+state.nextLedgerId++, from:q.assigneeId, to:q.giverId, amount:q.stakes, type:'stakes_loss', note:`Quest failed: ${q.title}`, date:new Date().toISOString() });
+  }
+  await saveState(); checkTrophies(); renderQuests();
+  if (currentPage === 'globe') initGlobe();
+  toast('Quest marked as failed', 'err');
+}
+
+// ═══════════════════════════════════════════
+//  AUTO FAIL CHECK (48hr auto-release)
+// ═══════════════════════════════════════════
+function checkAutoFails() {
+  let changed = false;
+  state.quests.forEach(q => {
+    // Auto-approve if awaiting_review for 48+ hours
+    if (q.status === 'awaiting_review' && q.proofSubmittedAt) {
+      const hrs = (Date.now() - new Date(q.proofSubmittedAt)) / 3600000;
+      if (hrs >= 48) {
+        q.status = 'completed'; q.completedAt = new Date().toISOString();
+        const p = getPlayer(q.assigneeId);
+        if (p) { p.xp += q.reward; p.coins += q.reward; p.questsCompleted++; }
+        toast(`Quest "${q.title}" auto-approved after 48h`, 'ok');
+        changed = true;
+      }
+    }
+    // Auto-fail if overdue by 24h and still active
+    if (q.status === 'active') {
+      const dl = new Date(q.deadline);
+      const hoursOverdue = (Date.now() - dl) / 3600000;
+      if (hoursOverdue > 24) {
+        // Don't auto-fail, just flag — giver must manually confirm
+      }
+    }
+  });
+  if (changed) saveState();
+}
+
+// ═══════════════════════════════════════════
+//  GALLERY
+// ═══════════════════════════════════════════
+let galleryQuestFilter = '';
+
+function renderGallery() {
+  const filterSel = document.getElementById('galleryFilter');
+  // Populate filter
+  filterSel.innerHTML = '<option value="">All Quests</option>' +
+    state.quests.filter(q => q.proofUrl).map(q => `<option value="${q.id}">${q.title}</option>`).join('');
+
+  const filterVal = filterSel.value;
+  const el = document.getElementById('galleryGrid');
+  const proofQuests = state.quests.filter(q => q.proofUrl && (!filterVal || q.id === filterVal));
+
+  if (!proofQuests.length) {
+    el.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🖼️</div><div class="empty-text">No proof submitted yet.</div></div>`;
+    return;
+  }
+
+  el.innerHTML = proofQuests.map(q => {
+    const assignee = getPlayer(q.assigneeId);
+    const [fg] = (assignee?.color||'#c9a84c,#333').split(',');
+    const url = q.proofUrl;
+    const isImg = /\.(jpg|jpeg|png|gif|webp)(\?|$)/i.test(url);
+    const isVid = /\.(mp4|mov|webm)(\?|$)/i.test(url);
+
+    let mediaHTML;
+    if (isImg)      mediaHTML = `<img src="${url}" alt="${q.title}" loading="lazy">`;
+    else if (isVid) mediaHTML = `<video src="${url}" muted></video>`;
+    else            mediaHTML = `<div class="gcard-media-icon">${proofIcon(url)}</div>`;
+
+    const statusColor = { completed:'var(--ok2)', failed:'#ff6060', awaiting_review:'var(--gold)', disputed:'#d47020', active:'var(--rune2)' }[q.status] || 'var(--textm)';
+
+    return `<div class="gcard" onclick="openMedia('${url}','${q.title}','${(q.proofNote||'').replace(/'/g,"\\'")}')">
+      <div class="gcard-media">${mediaHTML}</div>
+      <div class="gcard-body">
+        <div class="gcard-quest" style="color:${fg}">${q.title}</div>
+        <div class="gcard-note">${q.proofNote||'No notes'}</div>
+        <div class="gcard-meta">
+          <span style="color:${statusColor}">● ${q.status.replace('_',' ')}</span>
+          · ${assignee?.name||'?'}
+          · ${new Date(q.proofSubmittedAt||q.createdAt).toLocaleDateString()}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════
+//  MEDIA LIGHTBOX
+// ═══════════════════════════════════════════
+function openMedia(url, title, note) {
+  const lb = document.getElementById('lightbox');
+  const content = document.getElementById('lbContent');
+  const isImg = /\.(jpg|jpeg|png|gif|webp)(\?|$)/i.test(url);
+  const isVid = /\.(mp4|mov|webm)(\?|$)/i.test(url);
+  const isAud = /\.(mp3|wav|ogg|m4a)(\?|$)/i.test(url);
+
+  if (isImg)       content.innerHTML = `<img src="${url}" alt="${title}">`;
+  else if (isVid)  content.innerHTML = `<video src="${url}" controls autoplay></video>`;
+  else if (isAud)  content.innerHTML = `<div style="padding:40px;text-align:center"><div style="font-size:60px;margin-bottom:20px">🎵</div><audio src="${url}" controls></audio></div>`;
+  else             content.innerHTML = `<div style="padding:40px;text-align:center"><div style="font-size:60px;margin-bottom:20px">📄</div><a href="${url}" target="_blank" class="btn btn-gold">Open File</a></div>`;
+
+  document.getElementById('lbInfo').innerHTML = `<div class="lb-info-title">${title}</div>${note?`<div class="lb-info-sub">${note}</div>`:''}`;
+  lb.classList.add('open');
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lbContent').innerHTML = '';
+}
+
+document.getElementById('lightbox').addEventListener('click', e => {
+  if (e.target === document.getElementById('lightbox')) closeLightbox();
+});
+
+// ═══════════════════════════════════════════
+//  TROPHIES
+// ═══════════════════════════════════════════
+const TROPHIES = [
+  { id:'first_blood',   name:'First Blood',      icon:'🩸', desc:'Complete your first quest',           rarity:'common',    cond: p => p.questsCompleted >= 1 },
+  { id:'veteran',       name:'Veteran',           icon:'🛡️', desc:'Complete 5 quests',                  rarity:'rare',      cond: p => p.questsCompleted >= 5 },
+  { id:'legend_quest',  name:'Quest Legend',      icon:'👑', desc:'Complete 25 quests',                 rarity:'legendary', cond: p => p.questsCompleted >= 25 },
+  { id:'tormentor',     name:'The Tormentor',     icon:'😈', desc:'Assign 10 quests',                   rarity:'rare',      cond: p => p.questsGiven >= 10 },
+  { id:'coin_lord',     name:'Coin Hoarder',      icon:'💰', desc:'Accumulate 2000 coins',              rarity:'epic',      cond: p => p.coins >= 2000 },
+  { id:'unbothered',    name:'The Unbothered',    icon:'😎', desc:'Complete a disputed quest',          rarity:'epic',      cond: p => state.quests.some(q => q.assigneeId === p.id && q.status === 'completed' && q.disputeReason) },
+  { id:'ghost_hunter',  name:'Ghost Hunter',      icon:'👻', desc:'Opponent fails a quest you set',     rarity:'rare',      cond: p => state.quests.some(q => q.giverId === p.id && q.status === 'failed') },
+  { id:'globetrotter',  name:'Globetrotter',      icon:'🌍', desc:'10 total quests on the board',       rarity:'common',    cond: () => state.quests.length >= 10 },
+  { id:'flawless',      name:'Flawless',          icon:'✨', desc:'5 quests completed, zero failures',  rarity:'legendary', cond: p => p.questsCompleted >= 5 && p.questsFailed === 0 },
+  { id:'pact_keeper',   name:'Pact Keeper',       icon:'📜', desc:'Active for 30+ days',               rarity:'common',    cond: p => (Date.now() - new Date(p.joinedAt)) > 30*86400000 },
+  { id:'overachiever',  name:'Overachiever',      icon:'⭐', desc:'Reach Level 5',                      rarity:'epic',      cond: p => getLevel(p) >= 5 },
+  { id:'no_mercy',      name:'No Mercy',          icon:'⚔️', desc:'Assign a quest due in 24 hours',    rarity:'rare',      cond: p => state.quests.some(q => { const h=(new Date(q.deadline)-new Date(q.createdAt))/3600000; return q.giverId===p.id&&h<=24; }) },
+  { id:'speed_demon',   name:'Speed Demon',       icon:'⚡', desc:'Complete a quest in under 24h',      rarity:'epic',      cond: p => state.quests.some(q => { const h=(new Date(q.completedAt)-new Date(q.createdAt))/3600000; return q.assigneeId===p.id&&q.status==='completed'&&h<24; }) },
+  { id:'proof_artist',  name:'Proof Artist',      icon:'🎨', desc:'Submit a video proof',               rarity:'common',    cond: p => state.quests.some(q => q.assigneeId===p.id&&q.proofUrl&&/\.(mp4|mov|webm)/i.test(q.proofUrl)) },
+];
+
+function checkTrophies() {
+  state.players.forEach(p => {
+    if (!p.trophies) p.trophies = [];
+    TROPHIES.forEach(t => {
+      if (!p.trophies.includes(t.id) && t.cond(p)) {
+        p.trophies.push(t.id);
+        toast(`🏆 ${p.name} unlocked: ${t.name}!`, 'ok');
+      }
+    });
+  });
+}
+
+function renderTrophies() {
+  const el = document.getElementById('trophyContent');
+  const players = state.players.filter(p => p.role === 'player');
+  el.innerHTML = players.map(p => {
+    const [fg] = p.color.split(',');
+    return `<div style="margin-bottom:28px">
+      <div class="sec-title" style="color:${fg}">${p.name}'s Cabinet — ${p.trophies?.length||0}/${TROPHIES.length}</div>
+      <div class="trophy-grid">
+        ${TROPHIES.map(t => {
+          const unlocked = p.trophies?.includes(t.id);
+          return `<div class="tcard ${unlocked?'unlocked':'locked'}">
+            <div class="ticon">${t.icon}</div>
+            <div class="tname">${unlocked?t.name:'???'}</div>
+            <div class="tdesc">${t.desc}</div>
+            <div class="trarity r-${t.rarity}">${t.rarity}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════
+//  LEDGER
+// ═══════════════════════════════════════════
+function renderLedger() {
+  const el = document.getElementById('ledgerContent');
+  const balances = {};
+  state.players.forEach(p => balances[p.id] = 0);
+  state.ledger.forEach(e => { balances[e.from] = (balances[e.from]||0) - e.amount; balances[e.to] = (balances[e.to]||0) + e.amount; });
+
+  const players = state.players.filter(p => p.role === 'player');
+  const balHTML = `<div class="lbal">
+    ${players.map(p => {
+      const b = balances[p.id]||0;
+      const [fg] = p.color.split(',');
+      return `<div class="lbal-card">
+        <div class="lbal-amt" style="color:${b>=0?'var(--ok2)':'#ff6060'}">${b>=0?'+':''}$${Math.abs(b).toFixed(2)}</div>
+        <div class="lbal-lbl">${p.name} · Net Balance</div>
+      </div>`;
+    }).join('')}
+  </div>`;
+
+  let settleHTML = '';
+  if (players.length >= 2) {
+    const net = (balances[players[0].id]||0) - (balances[players[1].id]||0);
+    if (Math.abs(net) > 0.01) {
+      const debtor = net < 0 ? players[0] : players[1];
+      const creditor = net < 0 ? players[1] : players[0];
+      settleHTML = `<div class="settle-box">
+        <div style="font-size:14px;color:var(--textm);margin-bottom:12px">
+          <strong style="color:var(--text)">${debtor.name}</strong> owes
+          <strong style="color:var(--gold)">$${Math.abs(net).toFixed(2)} AUD</strong> to
+          <strong style="color:var(--text)">${creditor.name}</strong>
+        </div>
+        <a href="https://paypal.me/${creditor.name.toLowerCase()}/${Math.abs(net).toFixed(2)}" target="_blank" class="btn btn-primary btn-sm">
+          💳 Pay via PayPal · $${Math.abs(net).toFixed(2)}
+        </a>
+      </div>`;
+    }
+  }
+
+  const rows = [...state.ledger].reverse().map(e => {
+    const from = getPlayer(e.from), to = getPlayer(e.to);
+    const [ffg] = (from?.color||'#aaa,#333').split(',');
+    const [tfg] = (to?.color||'#aaa,#333').split(',');
+    const types = { stakes_loss:'⚑ Stakes', stakes_win:'✓ Stakes Won', payment:'💳 Payment', manual:'✎ Manual' };
+    return `<tr>
+      <td>${new Date(e.date).toLocaleDateString()}</td>
+      <td style="color:${ffg}">${from?.name||'?'}</td>
+      <td style="color:${tfg}">${to?.name||'?'}</td>
+      <td class="amt-neg">-$${e.amount.toFixed(2)}</td>
+      <td style="color:var(--textd)">${types[e.type]||e.type}</td>
+      <td style="color:var(--textm)">${e.note||''}</td>
+    </tr>`;
+  }).join('');
+
+  el.innerHTML = balHTML + settleHTML + `<div class="card">
+    <div class="ctitle">Transaction History</div>
+    ${!state.ledger.length
+      ? `<div class="empty" style="padding:30px 0"><div class="empty-icon">💰</div><div class="empty-text">No transactions yet</div></div>`
+      : `<table class="ltable"><thead><tr><th>Date</th><th>From</th><th>To</th><th>Amount</th><th>Type</th><th>Note</th></tr></thead><tbody>${rows}</tbody></table>`
+    }</div>`;
+}
+
+async function addDebt() {
+  const from = v('dFrom'), to = v('dTo'), amount = parseFloat(v('dAmt')), type = v('dType'), note = v('dNote');
+  if (!amount||amount<=0) { toast('Enter a valid amount','err'); return; }
+  if (from===to) { toast('From and To must differ','err'); return; }
+  state.ledger.push({ id:'l'+state.nextLedgerId++, from, to, amount, type, note, date:new Date().toISOString() });
+  await saveState(); closeModal('addDebtModal'); renderLedger(); toast('Transaction recorded','ok');
+}
+
+// ═══════════════════════════════════════════
+//  ROSTER
+// ═══════════════════════════════════════════
+function renderRoster() {
+  const el = document.getElementById('rosterContent');
+  const players = state.players.filter(p => p.role === 'player');
+  const arbs = state.players.filter(p => p.role === 'arbitrator');
+  el.innerHTML = `
+    <div class="sec-title">Players</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:28px">
+      ${players.map(p => playerCardHTML(p)).join('')}
+    </div>
+    ${arbs.length ? `
+      <div class="sec-title">Arbitrators</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">
+        ${arbs.map(p => playerCardHTML(p)).join('')}
+      </div>` : `
+      <div style="background:rgba(42,90,154,0.08);border:1px solid rgba(42,90,154,0.25);border-radius:7px;padding:14px;font-size:13px;color:var(--rune2)">
+        ⚖ No arbitrator set. Add a neutral friend as Arbitrator — they resolve disputes.
+      </div>`}`;
+}
+
+async function addPlayer() {
+  const name = v('pName'), role = v('pRole'), country = v('pCountry'), city = v('pCity');
+  const lat = parseFloat(v('pLat')), lng = parseFloat(v('pLng')), color = v('pColor');
+  if (!name||!country||!city) { toast('Fill name, country, city','err'); return; }
+  const p = {
+    id: 'p'+Date.now(), name, role, country, city,
+    lat: isNaN(lat)?0:lat, lng: isNaN(lng)?0:lng, color,
+    xp:0, coins:500, questsCompleted:0, questsFailed:0, questsGiven:0,
+    trophies:[], joinedAt:new Date().toISOString()
+  };
+  state.players.push(p);
+  await saveState();
+  closeModal('addPlayerModal');
+  renderRoster();
+  renderPlayerSwitcher();
+  toast(`${name} inducted into the Pact`, 'ok');
+  clearForm(['pName','pCountry','pCity','pLat','pLng']);
+}
+
+// ═══════════════════════════════════════════
+//  UTILS
+// ═══════════════════════════════════════════
+function v(id)          { return document.getElementById(id)?.value?.trim()||''; }
+function clearForm(ids) { ids.forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; }); }
+
+function fillSelect(...ids) {
+  ids.forEach(id => {
+    const el = document.getElementById(id); if (!el) return;
+    el.innerHTML = state.players.map(p => `<option value="${p.id}">${p.name} (${p.city})</option>`).join('');
+  });
+}
+
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+document.querySelectorAll('.modal-bg').forEach(el => {
+  el.addEventListener('click', e => { if(e.target===el) el.classList.remove('open'); });
+});
+
+document.addEventListener('keydown', e => { if(e.key==='Escape') { document.querySelectorAll('.modal-bg.open').forEach(m => m.classList.remove('open')); closeLightbox(); } });
+
+function toast(msg, type='') {
+  const wrap = document.getElementById('toasts');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.textContent = msg;
+  wrap.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+// Populate debt modal player selects
+document.getElementById('addDebtModal').addEventListener('click', () => {});
+document.getElementById('addDebtModal').querySelector('.btn').addEventListener('click', addDebt);
+// Pre-populate when opening ledger debt modal
+const origOpenModal = openModal;
+
+// Override openModal to auto-fill selects
+window.openModal = function(id) {
+  document.getElementById(id).classList.add('open');
+  if (id === 'addDebtModal') { fillSelect('dFrom','dTo'); }
+  if (id === 'addPlayerModal') {}
+};
+
+// ═══════════════════════════════════════════
+//  BOOT
+// ═══════════════════════════════════════════
+init();
+</script>
+</body>
+</html>
