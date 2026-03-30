@@ -6,15 +6,17 @@
       "role": "player",
       "country": "Australia",
       "city": "Melbourne",
-      "lat": -37.81,
-      "lng": 144.96,
+      "lat": -33.8661,
+      "lng": 151.2043,
       "color": "#c9a84c,#7a5010",
       "xp": 0,
       "coins": 500,
       "questsCompleted": 0,
       "questsFailed": 0,
       "questsGiven": 0,
-      "trophies": [],
+      "trophies": [
+        "pact_keeper"
+      ],
       "joinedAt": "2025-01-01T00:00:00.000Z"
     },
     {
@@ -31,7 +33,9 @@
       "questsCompleted": 0,
       "questsFailed": 0,
       "questsGiven": 0,
-      "trophies": [],
+      "trophies": [
+        "pact_keeper"
+      ],
       "joinedAt": "2025-01-01T00:00:00.000Z"
     }
   ],
