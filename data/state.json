@@ -13,7 +13,7 @@
       "coins": 500,
       "questsCompleted": 0,
       "questsFailed": 0,
-      "questsGiven": 0,
+      "questsGiven": 1,
       "trophies": [
         "pact_keeper"
       ],
@@ -39,8 +39,25 @@
       "joinedAt": "2025-01-01T00:00:00.000Z"
     }
   ],
-  "quests": [],
+  "quests": [
+    {
+      "id": "q1",
+      "title": "Buy a can of coke",
+      "description": "Go to nearest grocery station and buy a can of coke",
+      "assigneeId": "p2",
+      "giverId": "p1",
+      "deadline": "2026-04-06",
+      "reward": 100,
+      "stakes": 50,
+      "status": "active",
+      "proofUrl": null,
+      "proofNote": null,
+      "disputeReason": null,
+      "createdAt": "2026-03-30T01:34:03.023Z",
+      "completedAt": null
+    }
+  ],
   "ledger": [],
-  "nextQuestId": 1,
+  "nextQuestId": 2,
   "nextLedgerId": 1
 }
