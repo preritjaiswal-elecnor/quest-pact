@@ -28,9 +28,9 @@
       "lat": 43.65,
       "lng": -79.38,
       "color": "#60a0ff,#1a3060",
-      "xp": 0,
-      "coins": 500,
-      "questsCompleted": 0,
+      "xp": 100,
+      "coins": 600,
+      "questsCompleted": 1,
       "questsFailed": 0,
       "questsGiven": 0,
       "trophies": [
@@ -49,16 +49,26 @@
       "deadline": "2026-04-06",
       "reward": 100,
       "stakes": 50,
-      "status": "awaiting_review",
+      "status": "completed",
       "proofUrl": "https://res.cloudinary.com/dkabvueeu/image/upload/v1774834553/quest-pact/q1/p2_1774834552.png",
       "proofNote": "Screenshot 2026-02-02 120646.png",
       "disputeReason": null,
       "createdAt": "2026-03-30T01:34:03.023Z",
-      "completedAt": null,
+      "completedAt": "2026-03-30T01:36:36.919Z",
       "proofSubmittedAt": "2026-03-30T01:35:54.482Z"
     }
   ],
-  "ledger": [],
+  "ledger": [
+    {
+      "id": "l1",
+      "from": "p1",
+      "to": "p2",
+      "amount": 50,
+      "type": "stakes_win",
+      "note": "Quest: Buy a can of coke",
+      "date": "2026-03-30T01:36:36.919Z"
+    }
+  ],
   "nextQuestId": 2,
-  "nextLedgerId": 1
+  "nextLedgerId": 2
 }
