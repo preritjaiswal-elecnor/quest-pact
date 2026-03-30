@@ -2,7 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Quest Pact">
+<meta name="theme-color" content="#06080d">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icon-192.png">
 <title>Quest Pact</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
@@ -636,7 +643,13 @@ function renderGlobe() {
 
 function renderGlobeSidebar() {
   const el = document.getElementById('globeSidebar');
-  el.innerHTML = state.players.map(p => playerCardHTML(p)).join('');
+  el.innerHTML = state.players.map(p => playerCardHTML(p)).join('') + `
+    <div class="card" style="background:rgba(42,90,154,0.08);border-color:rgba(42,90,154,0.25)">
+      <div class="ctitle">Live Location</div>
+      <p style="font-size:13px;color:var(--textm);margin-bottom:12px;line-height:1.5">Share your current location to move your pin on the globe in real time.</p>
+      <button class="btn btn-rune btn-full" id="shareLocationBtn" onclick="shareMyLocation()">📍 Share My Location</button>
+      <div id="locationStatus" style="margin-top:8px;font-size:12px;color:var(--textd);text-align:center"></div>
+    </div>`;
 }
 
 function initGlobe() {
@@ -1698,9 +1711,55 @@ window.openModal = function(id) {
 };
 
 // ═══════════════════════════════════════════
+//  LIVE LOCATION
+// ═══════════════════════════════════════════
+async function shareMyLocation() {
+  const btn = document.getElementById('shareLocationBtn');
+  const status = document.getElementById('locationStatus');
+  if (!navigator.geolocation) { if(status) status.textContent = 'Geolocation not supported.'; return; }
+  if(btn) { btn.disabled = true; btn.textContent = '📍 Getting location...'; }
+  navigator.geolocation.getCurrentPosition(async pos => {
+    const lat = parseFloat(pos.coords.latitude.toFixed(4));
+    const lng = parseFloat(pos.coords.longitude.toFixed(4));
+    const player = getPlayer(SESSION_PLAYER);
+    if (player) {
+      player.lat = lat; player.lng = lng;
+      await saveState();
+      if(status) status.textContent = `✓ ${lat}, ${lng}`;
+      if(btn) { btn.textContent = '📍 Updated!'; setTimeout(() => { btn.disabled = false; btn.textContent = '📍 Share My Location'; }, 3000); }
+      renderGlobeSidebar(); initGlobe();
+      toast('Your pin updated on the globe', 'ok');
+    }
+  }, err => {
+    if(btn) { btn.disabled = false; btn.textContent = '📍 Share My Location'; }
+    const msgs = { 1:'Permission denied.', 2:'Location unavailable.', 3:'Timed out.' };
+    if(status) status.textContent = msgs[err.code] || 'Location error.';
+  }, { enableHighAccuracy: true, timeout: 10000 });
+}
+
+// ═══════════════════════════════════════════
 //  BOOT
 // ═══════════════════════════════════════════
 init();
+
+// PWA service worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+
+// PWA install prompt
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); deferredPrompt = e;
+  setTimeout(() => {
+    const t = document.createElement('div');
+    t.className = 'toast'; t.style.cursor = 'pointer';
+    t.innerHTML = '📲 Tap to add Quest Pact to home screen';
+    t.onclick = () => { deferredPrompt?.prompt(); t.remove(); };
+    document.getElementById('toasts').appendChild(t);
+    setTimeout(() => t.remove(), 8000);
+  }, 3000);
+});
 </script>
 </body>
 </html>
