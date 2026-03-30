@@ -1,1 +1,42 @@
-{}
+{
+  "players": [
+    {
+      "id": "p1",
+      "name": "Prerit",
+      "role": "player",
+      "country": "Australia",
+      "city": "Melbourne",
+      "lat": -37.81,
+      "lng": 144.96,
+      "color": "#c9a84c,#7a5010",
+      "xp": 0,
+      "coins": 500,
+      "questsCompleted": 0,
+      "questsFailed": 0,
+      "questsGiven": 0,
+      "trophies": [],
+      "joinedAt": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "p2",
+      "name": "Friend",
+      "role": "player",
+      "country": "Canada",
+      "city": "Toronto",
+      "lat": 43.65,
+      "lng": -79.38,
+      "color": "#60a0ff,#1a3060",
+      "xp": 0,
+      "coins": 500,
+      "questsCompleted": 0,
+      "questsFailed": 0,
+      "questsGiven": 0,
+      "trophies": [],
+      "joinedAt": "2025-01-01T00:00:00.000Z"
+    }
+  ],
+  "quests": [],
+  "ledger": [],
+  "nextQuestId": 1,
+  "nextLedgerId": 1
+}
