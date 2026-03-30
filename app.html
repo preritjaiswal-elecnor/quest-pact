@@ -16,29 +16,29 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
 :root{
-  --void:#06080d;--stone:#0d1118;--bg:#10151e;--card:#141b26;--card2:#1a2232;
-  --border:#1e2d40;--border2:#2e4560;
-  --gold:#c9a84c;--gold2:#f0c060;--gold3:#7a5820;
-  --crimson:#8b1a1a;--crimson2:#c02828;
+  --void:#06080d;--stone:#0d1320;--bg:#0f1724;--card:#162030;--card2:#1c2a40;
+  --border:#243550;--border2:#3a5878;
+  --gold:#e0b84a;--gold2:#ffd060;--gold3:#a07828;
+  --crimson:#8b1a1a;--crimson2:#e03030;
   --ember:#d4621a;--ember2:#ff8040;
-  --silver:#a0b4c8;--silver2:#506070;
-  --text:#e8dfc8;--textm:#9aa8b8;--textd:#445566;
-  --ok:#2d7a4a;--ok2:#40c070;
-  --rune:#2a5a9a;--rune2:#60a0ff;
-  --purple:#6a28aa;--purple2:#b080ff;
+  --silver:#c8d8e8;--silver2:#7a9ab8;
+  --text:#f0e8d0;--textm:#c8d8e8;--textd:#7a9ab8;
+  --ok:#2d7a4a;--ok2:#50e090;
+  --rune:#2a5a9a;--rune2:#70b0ff;
+  --purple:#6a28aa;--purple2:#c090ff;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden}
-body{background:var(--void);color:var(--text);font-family:'Crimson Pro',Georgia,serif;font-size:15px;display:flex;flex-direction:column;}
+body{background:var(--void);color:var(--text);font-family:'Crimson Pro',Georgia,serif;font-size:17px;display:flex;flex-direction:column;}
 
 /* ── NAV ── */
 nav{flex-shrink:0;background:rgba(6,8,13,0.97);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);z-index:100;position:relative;}
 .nav-inner{max-width:none;padding:0 20px;height:56px;display:flex;align-items:center;gap:20px;}
 .nav-logo{font-family:'Cinzel',serif;font-size:18px;font-weight:900;letter-spacing:3px;color:var(--gold);text-shadow:0 0 20px rgba(201,168,76,0.4);cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:8px;}
 .nav-tabs{display:flex;gap:2px;flex:1;}
-.nav-tab{padding:6px 14px;border-radius:4px;cursor:pointer;font-family:'Cinzel',serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--textd);background:none;border:1px solid transparent;transition:all 0.2s;white-space:nowrap;}
-.nav-tab:hover{color:var(--textm);background:rgba(255,255,255,0.04);}
-.nav-tab.active{color:var(--gold);border-color:var(--border);background:rgba(201,168,76,0.07);}
+.nav-tab{padding:6px 14px;border-radius:4px;cursor:pointer;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--textd);background:none;border:1px solid transparent;transition:all 0.2s;white-space:nowrap;}
+.nav-tab:hover{color:var(--textm);background:rgba(255,255,255,0.05);}
+.nav-tab.active{color:var(--gold);border-color:var(--border2);background:rgba(224,184,74,0.1);}
 .nav-right{display:flex;align-items:center;gap:10px;margin-left:auto;}
 .player-pill{display:flex;align-items:center;gap:7px;padding:4px 12px;border-radius:20px;cursor:pointer;border:1px solid var(--border);background:var(--card);font-size:13px;color:var(--textm);transition:all 0.2s;}
 .player-pill.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.09);}
@@ -77,22 +77,22 @@ nav{flex-shrink:0;background:rgba(6,8,13,0.97);border-bottom:1px solid var(--bor
 /* ── CARDS ── */
 .card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;}
 .card:hover{border-color:var(--border2);}
-.ctitle{font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--silver2);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.ctitle{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--silver2);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
 .ctitle::before{content:'';flex:none;width:16px;height:1px;background:var(--border2);}
 
 /* ── PLAYER CARD ── */
 .pc-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
-.pc-av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:18px;font-weight:700;border:2px solid;flex-shrink:0;}
-.pc-name{font-family:'Cinzel',serif;font-size:14px;font-weight:600;color:var(--text);}
-.pc-loc{font-size:12px;color:var(--textd);margin-top:2px;}
-.pc-rank{font-size:11px;color:var(--gold3);font-style:italic;margin-top:1px;}
+.pc-av{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:20px;font-weight:700;border:2px solid;flex-shrink:0;}
+.pc-name{font-family:'Cinzel',serif;font-size:16px;font-weight:600;color:var(--text);}
+.pc-loc{font-size:14px;color:var(--textd);margin-top:2px;}
+.pc-rank{font-size:13px;color:var(--gold3);font-style:italic;margin-top:1px;}
 .stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;}
-.sbox{background:var(--stone);border-radius:5px;padding:8px 6px;text-align:center;border:1px solid var(--border);}
-.sval{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--gold);}
-.slbl{font-size:10px;color:var(--textd);letter-spacing:1px;text-transform:uppercase;margin-top:1px;}
+.sbox{background:var(--stone);border-radius:5px;padding:10px 6px;text-align:center;border:1px solid var(--border);}
+.sval{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--gold);}
+.slbl{font-size:11px;color:var(--textd);letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
 .xpbar{margin-top:8px;}
-.xpbar-lbl{display:flex;justify-content:space-between;font-size:11px;color:var(--textd);margin-bottom:4px;}
-.xpbar-track{height:5px;background:var(--stone);border-radius:3px;overflow:hidden;border:1px solid var(--border);}
+.xpbar-lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--textd);margin-bottom:4px;}
+.xpbar-track{height:6px;background:var(--stone);border-radius:3px;overflow:hidden;border:1px solid var(--border);}
 .xpbar-fill{height:100%;border-radius:3px;transition:width 0.6s ease;}
 
 /* ── QUEST BOARD ── */
@@ -114,10 +114,10 @@ nav{flex-shrink:0;background:rgba(6,8,13,0.97);border-bottom:1px solid var(--bor
 .b-completed{background:rgba(45,122,74,0.12);color:var(--ok2);border:1px solid rgba(45,122,74,0.25);}
 .b-failed{background:rgba(139,26,26,0.12);color:#ff6060;border:1px solid rgba(139,26,26,0.25);}
 .b-disputed{background:rgba(139,74,26,0.12);color:#d47020;border:1px solid rgba(139,74,26,0.25);}
-.qtitle{font-family:'Cinzel',serif;font-size:14px;font-weight:600;color:var(--text);margin-bottom:5px;line-height:1.4;}
-.qdesc{font-size:13px;color:var(--textm);line-height:1.6;margin-bottom:12px;}
-.qmeta{display:flex;gap:12px;font-size:12px;color:var(--textd);margin-bottom:10px;flex-wrap:wrap;}
-.qdeadline{font-size:11px;padding:3px 8px;border-radius:3px;display:inline-flex;align-items:center;gap:4px;}
+.qtitle{font-family:'Cinzel',serif;font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px;line-height:1.4;}
+.qdesc{font-size:15px;color:var(--textm);line-height:1.6;margin-bottom:12px;}
+.qmeta{display:flex;gap:12px;font-size:13px;color:var(--textd);margin-bottom:10px;flex-wrap:wrap;}
+.qdeadline{font-size:12px;padding:3px 8px;border-radius:3px;display:inline-flex;align-items:center;gap:4px;}
 .dl-ok{background:rgba(45,122,74,0.12);color:var(--ok2);}
 .dl-soon{background:rgba(212,98,26,0.12);color:var(--ember2);}
 .dl-crit{background:rgba(139,26,26,0.15);color:#ff6060;}
@@ -685,24 +685,35 @@ function initGlobe() {
   sGeo.setAttribute('position', new THREE.Float32BufferAttribute(sverts, 3));
   globeScene.add(new THREE.Points(sGeo, new THREE.PointsMaterial({ color: 0xaabbdd, size: 0.018, transparent: true, opacity: 0.7 })));
 
-  // Earth globe with real texture from NASA Blue Marble
+  // Real Earth — NASA Blue Marble texture
   const earthGeo = new THREE.SphereGeometry(1, 64, 64);
   const textureLoader = new THREE.TextureLoader();
+  textureLoader.crossOrigin = 'anonymous';
 
-  // Use ESRI/ArcGIS world imagery (publicly accessible tile)
-  // We'll create a canvas-based texture with continents drawn
-  const earthCanvas = createEarthCanvas();
-  const earthTex = new THREE.CanvasTexture(earthCanvas);
+  // Load real NASA Blue Marble texture (publicly hosted)
+  const earthTex = textureLoader.load(
+    'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg',
+    () => { if(globeRenderer) globeRenderer.render(globeScene, globeCamera); }
+  );
+  const bumpTex = textureLoader.load('https://unpkg.com/three-globe/example/img/earth-topology.png');
+  const specTex = textureLoader.load('https://unpkg.com/three-globe/example/img/earth-water.png');
+  const nightTex = textureLoader.load('https://unpkg.com/three-globe/example/img/earth-night.jpg');
 
   const earthMat = new THREE.MeshPhongMaterial({
     map: earthTex,
-    specular: new THREE.Color(0x112233),
-    shininess: 12,
-    emissive: new THREE.Color(0x001122),
-    emissiveIntensity: 0.15
+    bumpMap: bumpTex,
+    bumpScale: 0.008,
+    specularMap: specTex,
+    specular: new THREE.Color(0x226699),
+    shininess: 18,
   });
   const earth = new THREE.Mesh(earthGeo, earthMat);
   globeScene.add(earth);
+
+  // Night lights on dark side
+  const nightMat = new THREE.MeshBasicMaterial({ map: nightTex, transparent: true, opacity: 0.0 });
+  const nightMesh = new THREE.Mesh(new THREE.SphereGeometry(1.001, 64, 64), nightMat);
+  globeScene.add(nightMesh);
 
   // Atmosphere
   const atmMat = new THREE.MeshPhongMaterial({
@@ -786,33 +797,58 @@ function initGlobe() {
     })));
   }
 
-  // Mouse controls
-  let isDragging = false, prevX = 0, prevY = 0;
+  // Mouse controls — ONLY rotate when button is held
+  let mouseHeld = false, isDragging = false, prevX = 0, prevY = 0;
   let rotY = 0, rotX = 0.2;
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
 
   canvas.addEventListener('mousedown', e => {
-    isDragging = false;
+    mouseHeld = true; isDragging = false;
     prevX = e.clientX; prevY = e.clientY;
+    canvas.style.cursor = 'grabbing';
   });
+  window.addEventListener('mouseup', () => {
+    mouseHeld = false;
+    canvas.style.cursor = 'grab';
+  });
+
+  // Touch support
+  canvas.addEventListener('touchstart', e => {
+    mouseHeld = true; isDragging = false;
+    prevX = e.touches[0].clientX; prevY = e.touches[0].clientY;
+  }, { passive: true });
+  window.addEventListener('touchend', () => { mouseHeld = false; });
+  canvas.addEventListener('touchmove', e => {
+    if (!mouseHeld) return;
+    e.preventDefault();
+    const dx = e.touches[0].clientX - prevX, dy = e.touches[0].clientY - prevY;
+    isDragging = true;
+    rotY += dx * 0.005; rotX += dy * 0.003;
+    rotX = Math.max(-1.2, Math.min(1.2, rotX));
+    prevX = e.touches[0].clientX; prevY = e.touches[0].clientY;
+  }, { passive: false });
+
   canvas.addEventListener('mousemove', e => {
-    const dx = e.clientX - prevX, dy = e.clientY - prevY;
-    if (Math.abs(dx) > 2 || Math.abs(dy) > 2) {
-      isDragging = true;
-      rotY += dx * 0.005;
-      rotX += dy * 0.003;
-      rotX = Math.max(-1.2, Math.min(1.2, rotX));
-      prevX = e.clientX; prevY = e.clientY;
+    // Only rotate when mouse button held
+    if (mouseHeld) {
+      const dx = e.clientX - prevX, dy = e.clientY - prevY;
+      if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
+        isDragging = true;
+        rotY += dx * 0.005;
+        rotX += dy * 0.003;
+        rotX = Math.max(-1.2, Math.min(1.2, rotX));
+        prevX = e.clientX; prevY = e.clientY;
+      }
     }
-    // Hover tooltip
+    // Hover tooltip — always works
     const rect = canvas.getBoundingClientRect();
     mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
     raycaster.setFromCamera(mouse, globeCamera);
     const hits = raycaster.intersectObjects(globeObjects);
     const tt = document.getElementById('globeTooltip');
-    if (hits.length) {
+    if (hits.length && !mouseHeld) {
       const obj = hits[0].object;
       const d = obj.userData;
       tt.style.display = 'block';
@@ -828,12 +864,12 @@ function initGlobe() {
       canvas.style.cursor = 'pointer';
     } else {
       tt.style.display = 'none';
-      canvas.style.cursor = isDragging ? 'grabbing' : 'grab';
+      if (!mouseHeld) canvas.style.cursor = 'grab';
     }
   });
 
   canvas.addEventListener('click', e => {
-    if (isDragging) return;
+    if (isDragging) { isDragging = false; return; }
     const rect = canvas.getBoundingClientRect();
     mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
