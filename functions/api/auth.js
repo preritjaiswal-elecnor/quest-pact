@@ -4,7 +4,7 @@ const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods
 async function hashPassword(password, salt, pepper) {
   const enc = new TextEncoder();
   const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password + pepper), { name: 'PBKDF2' }, false, ['deriveBits']);
-  const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', salt: enc.encode(salt), iterations: 200000, hash: 'SHA-256' }, keyMaterial, 256);
+  const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', salt: enc.encode(salt), iterations: 100000, hash: 'SHA-256' }, keyMaterial, 256);
   return Array.from(new Uint8Array(bits)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
