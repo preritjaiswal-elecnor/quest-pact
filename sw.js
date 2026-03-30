@@ -1,5 +1,5 @@
 // Quest Pact Service Worker
-const CACHE = 'questpact-v1';
+const CACHE = 'questpact-v2';
 const STATIC = ['/', '/index.html', '/app.html', '/manifest.json'];
 
 self.addEventListener('install', e => {
