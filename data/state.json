@@ -34,7 +34,9 @@
       "questsFailed": 0,
       "questsGiven": 0,
       "trophies": [
-        "pact_keeper"
+        "pact_keeper",
+        "first_blood",
+        "speed_demon"
       ],
       "joinedAt": "2025-01-01T00:00:00.000Z"
     }
