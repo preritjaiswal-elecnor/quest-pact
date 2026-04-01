@@ -75,8 +75,6 @@ nav{flex-shrink:0;background:rgba(6,8,13,0.97);border-bottom:1px solid var(--bor
 .qpp-status{font-size:11px;letter-spacing:1px;text-transform:uppercase;font-family:'Cinzel',serif;}
 
 /* ── CARDS ── */
-.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;}
-.card:hover{border-color:var(--border2);}
 .ctitle{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--silver2);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
 .ctitle::before{content:'';flex:none;width:16px;height:1px;background:var(--border2);}
 
@@ -86,6 +84,10 @@ nav{flex-shrink:0;background:rgba(6,8,13,0.97);border-bottom:1px solid var(--bor
 .pc-name{font-family:'Cinzel',serif;font-size:16px;font-weight:600;color:var(--text);}
 .pc-loc{font-size:14px;color:var(--textd);margin-top:2px;}
 .pc-rank{font-size:13px;color:var(--gold3);font-style:italic;margin-top:1px;}
+.pc-edit{position:absolute;top:12px;right:12px;background:none;border:1px solid var(--border);color:var(--textd);width:28px;height:28px;border-radius:5px;cursor:pointer;font-size:13px;transition:all 0.2s;display:flex;align-items:center;justify-content:center;}
+.pc-edit:hover{border-color:var(--gold3);color:var(--gold);}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;position:relative;}
+.card:hover{border-color:var(--border2);}
 .stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;}
 .sbox{background:var(--stone);border-radius:5px;padding:10px 6px;text-align:center;border:1px solid var(--border);}
 .sval{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--gold);}
@@ -241,7 +243,48 @@ nav{flex-shrink:0;background:rgba(6,8,13,0.97);border-bottom:1px solid var(--bor
 .lb-info-title{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);}
 .lb-info-sub{font-size:12px;color:var(--textm);margin-top:3px;}
 
-::-webkit-scrollbar{width:5px;height:5px}
+/* ── ARENA ── */
+.arena-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;}
+.arena-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;transition:all 0.2s;position:relative;overflow:hidden;}
+.arena-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.arena-card.type-weekly::before{background:linear-gradient(90deg,var(--rune),var(--rune2));}
+.arena-card.type-tournament::before{background:linear-gradient(90deg,var(--gold3),var(--gold));}
+.arena-card.type-solo::before{background:linear-gradient(90deg,var(--ok),var(--ok2));}
+.arena-card.type-collaborative::before{background:linear-gradient(90deg,var(--purple),var(--purple2));}
+.arena-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.4);}
+.arena-title{font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.arena-obj{font-size:14px;color:var(--textm);line-height:1.6;margin-bottom:14px;}
+.arena-meta{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--textd);margin-bottom:14px;}
+.arena-rewards{display:flex;gap:8px;margin-bottom:14px;}
+.arena-reward-pill{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;}
+.progress-bar-wrap{margin-bottom:14px;}
+.progress-bar-lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--textd);margin-bottom:5px;}
+.progress-bar-track{height:8px;background:var(--stone);border-radius:4px;overflow:hidden;border:1px solid var(--border);}
+.progress-bar-fill{height:100%;border-radius:4px;transition:width 0.6s ease;background:linear-gradient(90deg,var(--gold3),var(--gold));}
+.leaderboard{margin-top:12px;}
+.lb-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(36,53,80,0.5);font-size:14px;}
+.lb-row:last-child{border-bottom:none;}
+.lb-rank{font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--gold);width:28px;}
+.lb-name{flex:1;color:var(--text);}
+.lb-score{color:var(--gold);font-weight:600;}
+.arena-status-badge{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:3px;font-family:'Cinzel',serif;}
+.as-open{background:rgba(80,224,144,0.12);color:var(--ok2);border:1px solid rgba(80,224,144,0.25);}
+.as-active{background:rgba(112,176,255,0.12);color:var(--rune2);border:1px solid rgba(112,176,255,0.25);}
+.as-closed{background:rgba(100,100,100,0.12);color:var(--textd);border:1px solid rgba(100,100,100,0.25);}
+.reward-earned{background:rgba(224,184,74,0.12);border:1px solid rgba(224,184,74,0.25);border-radius:7px;padding:12px;margin-top:10px;}
+.reward-earned-title{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--gold);margin-bottom:8px;}
+.reward-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:13px;margin:3px;background:rgba(224,184,74,0.1);border:1px solid rgba(224,184,74,0.3);color:var(--gold);}
+
+/* ── AVATAR PICKER ── */
+.avatar-picker{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;padding:10px;background:var(--stone);border:1px solid var(--border);border-radius:6px;}
+.avatar-opt{aspect-ratio:1;border-radius:8px;border:2px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;transition:all 0.15s;}
+.avatar-opt:hover{border-color:var(--gold3);transform:scale(1.08);}
+.avatar-opt.selected{border-color:var(--gold);background:rgba(224,184,74,0.15);box-shadow:0 0 12px rgba(224,184,74,0.2);}
+
+/* ── PLAYER CARD EDIT BTN ── */
+.pc-edit{position:absolute;top:12px;right:12px;background:none;border:1px solid var(--border);color:var(--textd);width:28px;height:28px;border-radius:4px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.pc-edit:hover{border-color:var(--gold3);color:var(--gold);}
+.card{position:relative;}
 ::-webkit-scrollbar-track{background:var(--void)}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 ::-webkit-scrollbar-thumb:hover{background:var(--border2)}
@@ -271,7 +314,7 @@ nav{flex-shrink:0;background:rgba(6,8,13,0.97);border-bottom:1px solid var(--bor
       <button class="nav-tab" onclick="navigate('quests')">⚔ Quests</button>
       <button class="nav-tab" onclick="navigate('gallery')">🖼 Gallery</button>
       <button class="nav-tab" onclick="navigate('trophies')">🏆 Trophies</button>
-      <button class="nav-tab" onclick="navigate('ledger')">💰 Ledger</button>
+      <button class="nav-tab" onclick="navigate('arena')">🏟 Arena</button>
       <button class="nav-tab" onclick="navigate('roster')">👥 Roster</button>
     </div>
     <div class="nav-right">
@@ -322,7 +365,8 @@ nav{flex-shrink:0;background:rgba(6,8,13,0.97);border-bottom:1px solid var(--bor
     <div class="page-scroll">
       <div class="page-hdr">
         <div><div class="ph-title">Proof Gallery</div><div class="ph-sub">Every trial documented</div></div>
-        <div style="display:flex;gap:8px;align-items:center">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <input class="finp" id="gallerySearch" placeholder="🔍 Search proofs..." style="width:180px" oninput="renderGallery()">
           <select class="fsel" id="galleryFilter" style="width:auto" onchange="renderGallery()">
             <option value="">All Quests</option>
           </select>
@@ -332,22 +376,22 @@ nav{flex-shrink:0;background:rgba(6,8,13,0.97);border-bottom:1px solid var(--bor
     </div>
   </div>
 
+  <!-- ARENA -->
+  <div class="page" id="page-arena">
+    <div class="page-scroll">
+      <div class="page-hdr">
+        <div><div class="ph-title">The Arena</div><div class="ph-sub">Choose your challenge. Earn your glory.</div></div>
+        <button class="btn btn-gold" onclick="openModal('newArenaModal')">+ Create Arena</button>
+      </div>
+      <div id="arenaContent"></div>
+    </div>
+  </div>
+
   <!-- TROPHIES -->
   <div class="page" id="page-trophies">
     <div class="page-scroll">
       <div class="page-hdr"><div><div class="ph-title">Hall of Trophies</div><div class="ph-sub">Relics of battles fought</div></div></div>
       <div id="trophyContent"></div>
-    </div>
-  </div>
-
-  <!-- LEDGER -->
-  <div class="page" id="page-ledger">
-    <div class="page-scroll">
-      <div class="page-hdr">
-        <div><div class="ph-title">The Debt Ledger</div><div class="ph-sub">Gold promised, gold owed</div></div>
-        <button class="btn btn-ghost" onclick="openModal('addDebtModal')">+ Record</button>
-      </div>
-      <div id="ledgerContent"></div>
     </div>
   </div>
 
@@ -380,16 +424,14 @@ nav{flex-shrink:0;background:rgba(6,8,13,0.97);border-bottom:1px solid var(--bor
       <div class="fg"><label class="flbl">Deadline</label><input type="date" class="finp" id="qDeadline"></div>
       <div class="fg"><label class="flbl">Coins Reward</label><input type="number" class="finp" id="qReward" value="100" min="10" max="500"></div>
     </div>
-    <div class="frow">
-      <div class="fg"><label class="flbl">Stakes (AUD)</label><input type="number" class="finp" id="qStakes" value="50" min="0"></div>
-      <div class="fg"><label class="flbl">Proof Required</label>
+    <div class="fg">
+      <label class="flbl">Proof Required</label>
         <select class="fsel" id="qProofType">
           <option value="any">Any (photo, video, PDF, audio)</option>
           <option value="photo">Photo only</option>
           <option value="video">Video only</option>
           <option value="written">Written report</option>
         </select>
-      </div>
     </div>
     <button class="btn btn-gold btn-full" style="margin-top:6px" onclick="createQuest()">Seal the Quest</button>
   </div>
@@ -467,40 +509,88 @@ nav{flex-shrink:0;background:rgba(6,8,13,0.97);border-bottom:1px solid var(--bor
     </div>
     <div class="fg"><label class="flbl">Avatar Color</label>
       <select class="fsel" id="pColor">
-        <option value="#c9a84c,#7a5010">Gold</option>
-        <option value="#60a0ff,#1a3060">Rune Blue</option>
+        <option value="#e0b84a,#7a5010">Gold</option>
+        <option value="#70b0ff,#1a3060">Rune Blue</option>
         <option value="#ff6060,#601010">Crimson</option>
-        <option value="#40c070,#102a18">Emerald</option>
-        <option value="#b080ff,#3a1060">Arcane</option>
+        <option value="#50e090,#102a18">Emerald</option>
+        <option value="#c090ff,#3a1060">Arcane</option>
         <option value="#ff9040,#601a08">Ember</option>
       </select>
+    </div>
+    <div class="fg">
+      <label class="flbl">Choose Avatar</label>
+      <div class="avatar-picker" id="avatarPickerNew"></div>
+      <input type="hidden" id="pAvatar">
     </div>
     <button class="btn btn-rune btn-full" style="margin-top:6px" onclick="addPlayer()">Induct Member</button>
   </div>
 </div>
 
-<!-- Add Debt -->
-<div class="modal-bg" id="addDebtModal">
+<!-- Edit Player -->
+<div class="modal-bg" id="editPlayerModal">
   <div class="modal">
-    <button class="modal-x" onclick="closeModal('addDebtModal')">✕</button>
-    <div class="modal-title">💰 Record Transaction</div>
+    <button class="modal-x" onclick="closeModal('editPlayerModal')">✕</button>
+    <div class="modal-title">✏ Edit Player</div>
+    <input type="hidden" id="editPlayerId">
     <div class="frow">
-      <div class="fg"><label class="flbl">From</label><select class="fsel" id="dFrom"></select></div>
-      <div class="fg"><label class="flbl">To</label><select class="fsel" id="dTo"></select></div>
+      <div class="fg"><label class="flbl">Name</label><input class="finp" id="epName"></div>
+      <div class="fg"><label class="flbl">City</label><input class="finp" id="epCity"></div>
     </div>
     <div class="frow">
-      <div class="fg"><label class="flbl">Amount (AUD)</label><input type="number" class="finp" id="dAmt" placeholder="50" min="1"></div>
+      <div class="fg"><label class="flbl">Latitude</label><input type="number" class="finp" id="epLat" step="0.0001"></div>
+      <div class="fg"><label class="flbl">Longitude</label><input type="number" class="finp" id="epLng" step="0.0001"></div>
+    </div>
+    <div class="fg"><label class="flbl">Avatar Color</label>
+      <select class="fsel" id="epColor">
+        <option value="#e0b84a,#7a5010">Gold</option>
+        <option value="#70b0ff,#1a3060">Rune Blue</option>
+        <option value="#ff6060,#601010">Crimson</option>
+        <option value="#50e090,#102a18">Emerald</option>
+        <option value="#c090ff,#3a1060">Arcane</option>
+        <option value="#ff9040,#601a08">Ember</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label class="flbl">Choose Avatar</label>
+      <div class="avatar-picker" id="avatarPickerEdit"></div>
+      <input type="hidden" id="epAvatar">
+    </div>
+    <button class="btn btn-gold btn-full" style="margin-top:6px" onclick="savePlayerEdit()">Save Changes</button>
+  </div>
+</div>
+
+<!-- New Arena Modal -->
+<div class="modal-bg" id="newArenaModal">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal('newArenaModal')">✕</button>
+    <div class="modal-title">🏟 Create Arena</div>
+    <div class="fg"><label class="flbl">Arena Name</label><input class="finp" id="arTitle" placeholder="Name the challenge..."></div>
+    <div class="fg"><label class="flbl">Objective</label><textarea class="ftxt" id="arDesc" placeholder="What must be achieved to win this arena?"></textarea></div>
+    <div class="frow">
       <div class="fg"><label class="flbl">Type</label>
-        <select class="fsel" id="dType">
-          <option value="stakes_loss">Stakes Loss</option>
-          <option value="stakes_win">Stakes Won</option>
-          <option value="payment">Payment Made</option>
-          <option value="manual">Manual</option>
+        <select class="fsel" id="arType">
+          <option value="weekly">Weekly Challenge</option>
+          <option value="tournament">Tournament</option>
+          <option value="solo">Solo Trial</option>
+          <option value="collaborative">Collaborative</option>
         </select>
       </div>
+      <div class="fg"><label class="flbl">Ends</label><input type="date" class="finp" id="arEnds"></div>
     </div>
-    <div class="fg"><label class="flbl">Note</label><input class="finp" id="dNote" placeholder="Quest name or reason..."></div>
-    <button class="btn btn-gold btn-full" style="margin-top:6px" onclick="addDebt()">Record</button>
+    <div class="frow">
+      <div class="fg"><label class="flbl">Victory Reward (coins)</label><input type="number" class="finp" id="arReward" value="300" min="50"></div>
+      <div class="fg"><label class="flbl">Participation Reward</label><input type="number" class="finp" id="arParticipation" value="50" min="0"></div>
+    </div>
+    <div class="fg"><label class="flbl">Victory Title</label><input class="finp" id="arTitle2" placeholder="e.g. Arena Champion, Ironclad, The Relentless..."></div>
+    <button class="btn btn-gold btn-full" style="margin-top:6px" onclick="createArena()">Open the Arena</button>
+  </div>
+</div>
+
+<!-- Arena Join/Progress Modal -->
+<div class="modal-bg" id="arenaDetailModal">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal('arenaDetailModal')">✕</button>
+    <div id="arenaDetailContent"></div>
   </div>
 </div>
 
@@ -590,7 +680,7 @@ function navigate(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('page-' + page).classList.add('active');
-  const pages = ['globe','quests','gallery','trophies','ledger','roster'];
+  const pages = ['globe','quests','gallery','trophies','arena','roster'];
   const tabs = document.querySelectorAll('.nav-tab');
   const idx = pages.indexOf(page);
   if (tabs[idx]) tabs[idx].classList.add('active');
@@ -602,7 +692,7 @@ function renderPage(page) {
   if (page === 'quests')   renderQuests();
   if (page === 'gallery')  renderGallery();
   if (page === 'trophies') renderTrophies();
-  if (page === 'ledger')   renderLedger();
+  if (page === 'arena')    renderArena();
   if (page === 'roster')   renderRoster();
 }
 
@@ -729,55 +819,53 @@ function initGlobe() {
   });
   globeScene.add(new THREE.Mesh(new THREE.SphereGeometry(1.1, 32, 32), rimMat));
 
+  // Pin group — child of earth so pins rotate WITH it automatically
+  const pinGroup = new THREE.Group();
+  earth.add(pinGroup); // parented to earth = rotates with it, no manual sync needed
+
   // Player pins
   state.players.forEach(p => {
     const [fg] = p.color.split(',');
     const col = parseInt(fg.replace('#',''), 16);
     const pos = ll2v(p.lat, p.lng, 1.012);
 
-    // Pin sphere
     const pin = new THREE.Mesh(
-      new THREE.SphereGeometry(0.016, 16, 16),
+      new THREE.SphereGeometry(0.018, 16, 16),
       new THREE.MeshBasicMaterial({ color: col })
     );
     pin.position.copy(pos);
     pin.userData = { type: 'player', player: p };
-    globeScene.add(pin);
+    pinGroup.add(pin);
     globeObjects.push(pin);
 
-    // Pulse ring
     const ring = new THREE.Mesh(
-      new THREE.RingGeometry(0.020, 0.026, 32),
+      new THREE.RingGeometry(0.022, 0.030, 32),
       new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.6, side: THREE.DoubleSide })
     );
     ring.position.copy(pos);
-    ring.lookAt(new THREE.Vector3(0,0,0));
+    ring.lookAt(new THREE.Vector3(0, 0, 0));
     ring.userData = { isPulse: true };
-    globeScene.add(ring);
+    pinGroup.add(ring);
   });
 
-  // Quest pins — placed at assignee's location, coloured by status
+  // Quest pins
   state.quests.filter(q => q.status !== 'completed' && q.status !== 'failed').forEach(q => {
     const assignee = getPlayer(q.assigneeId);
     if (!assignee) return;
-    const statusColors = {
-      active: 0x60a0ff, pending_proof: 0xff8040,
-      awaiting_review: 0xc9a84c, disputed: 0xd47020
-    };
+    const statusColors = { active: 0x70b0ff, pending_proof: 0xff8040, awaiting_review: 0xe0b84a, disputed: 0xd47020 };
     const col = statusColors[q.status] || 0xffffff;
-    const offset = Math.random() * 0.03 - 0.015; // slight offset so pins don't stack
-    const pos = ll2v(assignee.lat + offset, assignee.lng + offset, 1.025);
+    const offset = (Math.random() - 0.5) * 0.04;
+    const pos = ll2v(assignee.lat + offset, assignee.lng + offset, 1.028);
 
     const qpin = new THREE.Mesh(
-      new THREE.ConeGeometry(0.012, 0.035, 8),
+      new THREE.ConeGeometry(0.013, 0.038, 8),
       new THREE.MeshBasicMaterial({ color: col })
     );
     qpin.position.copy(pos);
-    // Point outward from globe surface
-    qpin.lookAt(new THREE.Vector3(0,0,0));
+    qpin.lookAt(new THREE.Vector3(0, 0, 0));
     qpin.rotateX(Math.PI);
     qpin.userData = { type: 'quest', quest: q };
-    globeScene.add(qpin);
+    pinGroup.add(qpin);
     globeObjects.push(qpin);
   });
 
@@ -786,15 +874,16 @@ function initGlobe() {
     const p1 = state.players[0], p2 = state.players[1];
     const v1 = ll2v(p1.lat, p1.lng, 1.012), v2 = ll2v(p2.lat, p2.lng, 1.012);
     const arcPts = [];
-    for (let t = 0; t <= 1; t += 0.015) {
-      const v = new THREE.Vector3().lerpVectors(v1, v2, t);
-      v.normalize().multiplyScalar(1.0 + 0.5 * Math.sin(Math.PI * t));
+    for (let t2 = 0; t2 <= 1; t2 += 0.015) {
+      const v = new THREE.Vector3().lerpVectors(v1, v2, t2);
+      v.normalize().multiplyScalar(1.0 + 0.5 * Math.sin(Math.PI * t2));
       arcPts.push(v);
     }
-    const arcGeo = new THREE.BufferGeometry().setFromPoints(arcPts);
-    globeScene.add(new THREE.Line(arcGeo, new THREE.LineBasicMaterial({
-      color: 0xc9a84c, transparent: true, opacity: 0.45
-    })));
+    const arcLine = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints(arcPts),
+      new THREE.LineBasicMaterial({ color: 0xe0b84a, transparent: true, opacity: 0.5 })
+    );
+    pinGroup.add(arcLine); // arc also rotates with earth
   }
 
   // Mouse controls — ONLY rotate when button is held
@@ -846,7 +935,7 @@ function initGlobe() {
     mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
     raycaster.setFromCamera(mouse, globeCamera);
-    const hits = raycaster.intersectObjects(globeObjects);
+    const hits = raycaster.intersectObjects(globeObjects, true);
     const tt = document.getElementById('globeTooltip');
     if (hits.length && !mouseHeld) {
       const obj = hits[0].object;
@@ -874,7 +963,7 @@ function initGlobe() {
     mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
     raycaster.setFromCamera(mouse, globeCamera);
-    const hits = raycaster.intersectObjects(globeObjects);
+    const hits = raycaster.intersectObjects(globeObjects, true);
     if (hits.length) {
       const d = hits[0].object.userData;
       if (d.type === 'quest') showQuestPopup(d.quest, e.clientX, e.clientY, rect);
@@ -899,36 +988,22 @@ function initGlobe() {
   function animate() {
     globeAnimId = requestAnimationFrame(animate);
     t += 0.016;
-    if (!isDragging) rotY += 0.0006;
-    earth.rotation.y = rotY; earth.rotation.x = rotX;
-    // Sync pins
-    globeObjects.forEach(o => {
-      const orig = o.userData._origRot;
-    });
-    // Pulse rings
-    globeScene.children.forEach(c => {
+    if (!mouseHeld) rotY += 0.0006;
+    earth.rotation.y = rotY;
+    earth.rotation.x = rotX;
+    nightMesh.rotation.y = rotY;
+    nightMesh.rotation.x = rotX;
+    // Pulse rings inside pinGroup (already rotates with earth)
+    pinGroup.children.forEach(c => {
       if (c.userData.isPulse) {
         const s = 1 + 0.35 * Math.sin(t * 1.8);
         c.scale.setScalar(s);
-        c.material.opacity = 0.6 - 0.35 * Math.abs(Math.sin(t * 1.8));
-        c.rotation.y = rotY; c.rotation.x = rotX;
-      }
-    });
-    // Rotate pin group with earth
-    globeObjects.forEach(o => {
-      if (o.userData._basePos) {
-        const rotMat = new THREE.Matrix4().makeRotationY(rotY).multiply(new THREE.Matrix4().makeRotationX(rotX));
-        o.position.copy(o.userData._basePos.clone().applyMatrix4(rotMat));
+        c.material.opacity = 0.55 - 0.3 * Math.abs(Math.sin(t * 1.8));
       }
     });
     globeRenderer.render(globeScene, globeCamera);
   }
-
-  // Store base positions for pin rotation
-  globeObjects.forEach(o => { o.userData._basePos = o.position.clone(); });
-
   animate();
-}
 
 function showQuestPopup(quest, cx, cy, rect) {
   activeQuestPopupId = quest.id;
@@ -1137,13 +1212,15 @@ function getFlag(c)    {
   return {'Australia':'🇦🇺','Canada':'🇨🇦','USA':'🇺🇸','UK':'🇬🇧','India':'🇮🇳','Germany':'🇩🇪','New Zealand':'🇳🇿','France':'🇫🇷'}[c] || '🌍';
 }
 
-function playerCardHTML(p) {
+function playerCardHTML(p, showEdit = false) {
   const [fg, bg] = p.color.split(',');
   const lv = getLevel(p), xpn = getXpNext(p);
   const pct = Math.min(100, (p.xp / xpn) * 100);
+  const avatar = p.avatar || p.name[0];
   return `<div class="card">
+    ${showEdit ? `<button class="pc-edit" onclick="openEditPlayer('${p.id}')" title="Edit">✏️</button>` : ''}
     <div class="pc-head">
-      <div class="pc-av" style="background:${bg}30;color:${fg};border-color:${fg}60">${p.name[0]}</div>
+      <div class="pc-av" style="background:${bg}30;color:${fg};border-color:${fg}60;font-size:22px">${avatar}</div>
       <div>
         <div class="pc-name">${p.name} <span>${getFlag(p.country)}</span></div>
         <div class="pc-loc">${p.city}, ${p.country}</div>
@@ -1254,7 +1331,7 @@ async function createQuest() {
   const title    = v('qTitle'), desc = v('qDesc');
   const assignee = v('qAssignee'), giver = v('qGiver');
   const deadline = v('qDeadline'), reward = parseInt(v('qReward'))||100;
-  const stakes   = parseFloat(v('qStakes'))||0;
+  const stakes   = 0; // Arena system - no financial stakes
 
   if (!title||!desc||!deadline) { toast('Fill in all required fields', 'err'); return; }
   if (assignee === giver) { toast('Assignee and giver must differ', 'err'); return; }
@@ -1387,9 +1464,13 @@ async function approveQuest() {
   q.status = 'completed'; q.completedAt = new Date().toISOString();
   const p = getPlayer(q.assigneeId);
   if (p) { p.xp += q.reward; p.coins += q.reward; p.questsCompleted++; }
-  if (q.stakes > 0) {
-    state.ledger.push({ id:'l'+state.nextLedgerId++, from:q.giverId, to:q.assigneeId, amount:q.stakes, type:'stakes_win', note:`Quest: ${q.title}`, date:new Date().toISOString() });
-  }
+  // Grant reward record instead of debt entry
+  if (!state.rewards) state.rewards = [];
+  state.rewards.push({
+    id: 'r'+Date.now(), playerId: q.assigneeId,
+    label: `Completed: ${q.title}`, icon: '✅',
+    coins: q.reward, earnedAt: new Date().toISOString(), questId: q.id
+  });
   await saveState(); checkTrophies(); closeModal('reviewProofModal');
   renderQuests(); toast(`Quest approved! +${q.reward} coins to ${p?.name}`, 'ok');
   if (currentPage === 'globe') initGlobe();
@@ -1421,13 +1502,17 @@ async function markFailed(qid) {
   const q = state.quests.find(q => q.id === qid); if (!q) return;
   q.status = 'failed';
   const p = getPlayer(q.assigneeId);
-  if (p) { p.coins = Math.max(0, p.coins - Math.floor(q.reward * 0.5)); p.questsFailed++; }
-  if (q.stakes > 0) {
-    state.ledger.push({ id:'l'+state.nextLedgerId++, from:q.assigneeId, to:q.giverId, amount:q.stakes, type:'stakes_loss', note:`Quest failed: ${q.title}`, date:new Date().toISOString() });
-  }
+  // No penalty — failure just means no reward earned
+  if (p) { p.questsFailed++; }
+  if (!state.rewards) state.rewards = [];
+  state.rewards.push({
+    id: 'r'+Date.now(), playerId: q.giverId,
+    label: `Quest set conquered: ${q.title}`, icon: '⚔️',
+    coins: 0, earnedAt: new Date().toISOString(), questId: q.id
+  });
   await saveState(); checkTrophies(); renderQuests();
   if (currentPage === 'globe') initGlobe();
-  toast('Quest marked as failed', 'err');
+  toast('Quest expired — no reward earned', 'err');
 }
 
 // ═══════════════════════════════════════════
@@ -1466,22 +1551,32 @@ let galleryQuestFilter = '';
 
 function renderGallery() {
   const filterSel = document.getElementById('galleryFilter');
-  // Populate filter
+  const searchEl  = document.getElementById('gallerySearch');
+  const searchVal = (searchEl?.value || '').toLowerCase().trim();
+
+  // Populate filter dropdown
   filterSel.innerHTML = '<option value="">All Quests</option>' +
     state.quests.filter(q => q.proofUrl).map(q => `<option value="${q.id}">${q.title}</option>`).join('');
 
   const filterVal = filterSel.value;
   const el = document.getElementById('galleryGrid');
-  const proofQuests = state.quests.filter(q => q.proofUrl && (!filterVal || q.id === filterVal));
+
+  let proofQuests = state.quests.filter(q => q.proofUrl);
+  if (filterVal) proofQuests = proofQuests.filter(q => q.id === filterVal);
+  if (searchVal) proofQuests = proofQuests.filter(q =>
+    q.title.toLowerCase().includes(searchVal) ||
+    (q.proofNote||'').toLowerCase().includes(searchVal) ||
+    (getPlayer(q.assigneeId)?.name||'').toLowerCase().includes(searchVal)
+  );
 
   if (!proofQuests.length) {
-    el.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🖼️</div><div class="empty-text">No proof submitted yet.</div></div>`;
+    el.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🖼️</div><div class="empty-text">${searchVal ? 'No results for "'+searchVal+'"' : 'No proof submitted yet.'}</div></div>`;
     return;
   }
 
   el.innerHTML = proofQuests.map(q => {
     const assignee = getPlayer(q.assigneeId);
-    const [fg] = (assignee?.color||'#c9a84c,#333').split(',');
+    const [fg] = (assignee?.color||'#e0b84a,#333').split(',');
     const url = q.proofUrl;
     const isImg = /\.(jpg|jpeg|png|gif|webp)(\?|$)/i.test(url);
     const isVid = /\.(mp4|mov|webm)(\?|$)/i.test(url);
@@ -1591,74 +1686,236 @@ function renderTrophies() {
 }
 
 // ═══════════════════════════════════════════
-//  LEDGER
+//  ARENA SYSTEM
 // ═══════════════════════════════════════════
-function renderLedger() {
-  const el = document.getElementById('ledgerContent');
-  const balances = {};
-  state.players.forEach(p => balances[p.id] = 0);
-  state.ledger.forEach(e => { balances[e.from] = (balances[e.from]||0) - e.amount; balances[e.to] = (balances[e.to]||0) + e.amount; });
+const AVATARS = ['⚔️','🛡️','🏹','🗡️','🔮','🧙','🐉','🦅','🌙','⚡','🔥','🌊','🗺️','🏆','💀','🌟','🦁','🐺','🌋','🎯'];
 
-  const players = state.players.filter(p => p.role === 'player');
-  const balHTML = `<div class="lbal">
-    ${players.map(p => {
-      const b = balances[p.id]||0;
-      const [fg] = p.color.split(',');
-      return `<div class="lbal-card">
-        <div class="lbal-amt" style="color:${b>=0?'var(--ok2)':'#ff6060'}">${b>=0?'+':''}$${Math.abs(b).toFixed(2)}</div>
-        <div class="lbal-lbl">${p.name} · Net Balance</div>
-      </div>`;
-    }).join('')}
-  </div>`;
-
-  let settleHTML = '';
-  if (players.length >= 2) {
-    const net = (balances[players[0].id]||0) - (balances[players[1].id]||0);
-    if (Math.abs(net) > 0.01) {
-      const debtor = net < 0 ? players[0] : players[1];
-      const creditor = net < 0 ? players[1] : players[0];
-      settleHTML = `<div class="settle-box">
-        <div style="font-size:14px;color:var(--textm);margin-bottom:12px">
-          <strong style="color:var(--text)">${debtor.name}</strong> owes
-          <strong style="color:var(--gold)">$${Math.abs(net).toFixed(2)} AUD</strong> to
-          <strong style="color:var(--text)">${creditor.name}</strong>
-        </div>
-        <a href="https://paypal.me/${creditor.name.toLowerCase()}/${Math.abs(net).toFixed(2)}" target="_blank" class="btn btn-primary btn-sm">
-          💳 Pay via PayPal · $${Math.abs(net).toFixed(2)}
-        </a>
-      </div>`;
-    }
-  }
-
-  const rows = [...state.ledger].reverse().map(e => {
-    const from = getPlayer(e.from), to = getPlayer(e.to);
-    const [ffg] = (from?.color||'#aaa,#333').split(',');
-    const [tfg] = (to?.color||'#aaa,#333').split(',');
-    const types = { stakes_loss:'⚑ Stakes', stakes_win:'✓ Stakes Won', payment:'💳 Payment', manual:'✎ Manual' };
-    return `<tr>
-      <td>${new Date(e.date).toLocaleDateString()}</td>
-      <td style="color:${ffg}">${from?.name||'?'}</td>
-      <td style="color:${tfg}">${to?.name||'?'}</td>
-      <td class="amt-neg">-$${e.amount.toFixed(2)}</td>
-      <td style="color:var(--textd)">${types[e.type]||e.type}</td>
-      <td style="color:var(--textm)">${e.note||''}</td>
-    </tr>`;
-  }).join('');
-
-  el.innerHTML = balHTML + settleHTML + `<div class="card">
-    <div class="ctitle">Transaction History</div>
-    ${!state.ledger.length
-      ? `<div class="empty" style="padding:30px 0"><div class="empty-icon">💰</div><div class="empty-text">No transactions yet</div></div>`
-      : `<table class="ltable"><thead><tr><th>Date</th><th>From</th><th>To</th><th>Amount</th><th>Type</th><th>Note</th></tr></thead><tbody>${rows}</tbody></table>`
-    }</div>`;
+function initAvatarPicker(containerId, hiddenId, current) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = AVATARS.map(a => `
+    <div class="avatar-opt ${a === current ? 'selected' : ''}" onclick="selectAvatar('${containerId}','${hiddenId}','${a}')" title="${a}">${a}</div>
+  `).join('');
+  document.getElementById(hiddenId).value = current || AVATARS[0];
 }
 
-async function addDebt() {
-  const from = v('dFrom'), to = v('dTo'), amount = parseFloat(v('dAmt')), type = v('dType'), note = v('dNote');
-  if (!amount||amount<=0) { toast('Enter a valid amount','err'); return; }
-  if (from===to) { toast('From and To must differ','err'); return; }
-  state.ledger.push({ id:'l'+state.nextLedgerId++, from, to, amount, type, note, date:new Date().toISOString() });
-  await saveState(); closeModal('addDebtModal'); renderLedger(); toast('Transaction recorded','ok');
+function selectAvatar(containerId, hiddenId, avatar) {
+  document.querySelectorAll(`#${containerId} .avatar-opt`).forEach(el => el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  document.getElementById(hiddenId).value = avatar;
+}
+
+function renderArena() {
+  const el = document.getElementById('arenaContent');
+  if (!state.arenas) state.arenas = [];
+
+  const players = state.players.filter(p => p.role === 'player');
+
+  // Leaderboard section — overall standings
+  const sorted = [...players].sort((a, b) => (b.xp + b.coins) - (a.xp + a.coins));
+  const leaderboardHTML = `
+    <div class="sec-title">Overall Standings</div>
+    <div class="card" style="margin-bottom:24px">
+      <div class="leaderboard">
+        ${sorted.map((p, i) => {
+          const [fg] = p.color.split(',');
+          const medal = ['🥇','🥈','🥉'][i] || `#${i+1}`;
+          const lv = getLevel(p);
+          return `<div class="lb-row">
+            <div class="lb-rank">${medal}</div>
+            <div style="width:36px;height:36px;border-radius:50%;background:${fg}20;border:2px solid ${fg}50;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">${p.avatar||p.name[0]}</div>
+            <div class="lb-name">
+              <div style="font-family:'Cinzel',serif;font-size:14px;color:var(--text)">${p.name}</div>
+              <div style="font-size:11px;color:var(--textd)">${getRank(lv)} · Lv ${lv}</div>
+            </div>
+            <div style="text-align:right">
+              <div class="lb-score">${p.coins} coins</div>
+              <div style="font-size:11px;color:var(--textd)">${p.xp} XP · ${p.questsCompleted} wins</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+
+  // Player progress bars
+  const progressHTML = `
+    <div class="sec-title">Season Progress</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:24px">
+      ${players.map(p => {
+        const [fg] = p.color.split(',');
+        const total = p.questsCompleted + p.questsFailed;
+        const winRate = total > 0 ? Math.round((p.questsCompleted/total)*100) : 0;
+        const lv = getLevel(p), xpn = getXpNext(p);
+        const xpPct = Math.min(100, (p.xp / xpn) * 100);
+        return `<div class="card">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+            <div style="font-size:28px">${p.avatar||'⚔️'}</div>
+            <div>
+              <div style="font-family:'Cinzel',serif;font-size:15px;color:var(--text)">${p.name}</div>
+              <div style="font-size:12px;color:var(--textd)">${getRank(lv)} · Level ${lv}</div>
+            </div>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-lbl"><span>XP Progress</span><span>${p.xp} / ${xpn}</span></div>
+            <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${xpPct}%;background:linear-gradient(90deg,${fg}80,${fg})"></div></div>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-lbl"><span>Win Rate</span><span>${winRate}% (${p.questsCompleted}W / ${p.questsFailed}L)</span></div>
+            <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${winRate}%;background:linear-gradient(90deg,var(--ok),var(--ok2))"></div></div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">
+            ${(p.trophies||[]).slice(0,5).map(tid => {
+              const t = TROPHIES.find(x => x.id === tid);
+              return t ? `<span title="${t.name}" style="font-size:18px">${t.icon}</span>` : '';
+            }).join('')}
+            ${(p.trophies||[]).length > 5 ? `<span style="font-size:12px;color:var(--textd);align-self:center">+${p.trophies.length - 5} more</span>` : ''}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+
+  // Active arenas
+  const arenaHTML = state.arenas.length ? `
+    <div class="sec-title">Active Arenas</div>
+    <div class="arena-grid">
+      ${state.arenas.map(a => arenaCardHTML(a)).join('')}
+    </div>` : `
+    <div class="sec-title">Arenas</div>
+    <div class="empty"><div class="empty-icon">🏟️</div><div class="empty-text">No arenas yet. Create one to start a competitive challenge.</div></div>`;
+
+  // Rewards earned
+  const rewards = state.rewards || [];
+  const recentRewards = rewards.slice(-10).reverse();
+  const rewardsHTML = recentRewards.length ? `
+    <div class="sec-title" style="margin-top:24px">Recently Earned</div>
+    <div class="reward-earned">
+      <div class="reward-earned-title">Rewards & Achievements</div>
+      ${recentRewards.map(r => {
+        const p = getPlayer(r.playerId);
+        const [fg] = (p?.color||'#e0b84a,#333').split(',');
+        return `<span class="reward-pill" style="color:${fg};border-color:${fg}40;background:${fg}15">${r.icon||'🏆'} ${r.label} — <strong>${p?.name||'?'}</strong></span>`;
+      }).join('')}
+    </div>` : '';
+
+  el.innerHTML = leaderboardHTML + progressHTML + arenaHTML + rewardsHTML;
+}
+
+function arenaCardHTML(a) {
+  const typeLabel = { weekly:'Weekly Challenge', tournament:'Tournament', solo:'Solo Trial', collaborative:'Collaborative' };
+  const typeColors = { weekly:'var(--rune2)', tournament:'var(--gold)', solo:'var(--ok2)', collaborative:'var(--purple2)' };
+  const now = new Date(), ends = new Date(a.endsAt);
+  const daysLeft = Math.ceil((ends - now) / 86400000);
+  const isClosed = daysLeft < 0;
+  const participants = a.participants || [];
+  const me = SESSION_PLAYER;
+  const joined = participants.includes(me);
+
+  const scores = a.scores || {};
+  const sortedScores = Object.entries(scores).sort((x,y) => y[1]-x[1]);
+
+  return `<div class="arena-card type-${a.type}">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+      <span class="arena-status-badge ${isClosed?'as-closed':joined?'as-active':'as-open'}">${isClosed?'Closed':joined?'Competing':'Open'}</span>
+      <span style="font-size:11px;color:var(--textd)">${isClosed?'Ended':daysLeft+'d left'}</span>
+    </div>
+    <div class="arena-title">${a.title}</div>
+    <div class="arena-obj">${a.objective}</div>
+    <div class="arena-meta">
+      <span style="color:${typeColors[a.type]||'var(--textm)'}">${typeLabel[a.type]||a.type}</span>
+      <span>👥 ${participants.length} competing</span>
+      ${a.victoryTitle ? `<span>🎖 "${a.victoryTitle}"</span>` : ''}
+    </div>
+    <div class="arena-rewards">
+      <span class="arena-reward-pill" style="background:rgba(224,184,74,0.12);color:var(--gold);border:1px solid rgba(224,184,74,0.25)">🏆 ${a.victoryReward} coins</span>
+      <span class="arena-reward-pill" style="background:rgba(80,224,144,0.12);color:var(--ok2);border:1px solid rgba(80,224,144,0.25)">✦ ${a.participationReward} for entering</span>
+    </div>
+    ${sortedScores.length ? `
+      <div class="leaderboard" style="margin-bottom:12px">
+        ${sortedScores.slice(0,3).map(([pid, score], i) => {
+          const p = getPlayer(pid);
+          const [fg] = (p?.color||'#e0b84a,#333').split(',');
+          return `<div class="lb-row">
+            <div class="lb-rank" style="font-size:14px">${['🥇','🥈','🥉'][i]||i+1}</div>
+            <div class="lb-name" style="color:${fg}">${p?.name||'?'}</div>
+            <div class="lb-score">${score} pts</div>
+          </div>`;
+        }).join('')}
+      </div>` : ''}
+    ${!isClosed ? `<div style="display:flex;gap:8px">
+      ${!joined ? `<button class="btn btn-gold btn-sm" onclick="joinArena('${a.id}')">⚔ Enter Arena</button>` : `<button class="btn btn-primary btn-sm" onclick="addArenaPoints('${a.id}')">+ Add Progress</button>`}
+      <button class="btn btn-ghost btn-sm" onclick="openArenaDetail('${a.id}')">Details</button>
+    </div>` : `<div style="font-size:13px;color:var(--textd);font-style:italic">This arena has concluded.</div>`}
+  </div>`;
+}
+
+async function createArena() {
+  const title = v('arTitle'), objective = v('arDesc'), type = v('arType');
+  const endsAt = v('arEnds'), victoryReward = parseInt(v('arReward'))||300;
+  const participationReward = parseInt(v('arParticipation'))||50;
+  const victoryTitle = v('arTitle2');
+  if (!title||!objective||!endsAt) { toast('Fill in all fields','err'); return; }
+  if (!state.arenas) state.arenas = [];
+  const arena = {
+    id: 'a'+Date.now(), title, objective, type, endsAt,
+    victoryReward, participationReward, victoryTitle,
+    participants: [], scores: {}, rewards: [],
+    createdBy: SESSION_PLAYER, createdAt: new Date().toISOString()
+  };
+  state.arenas.push(arena);
+  await saveState();
+  closeModal('newArenaModal');
+  renderArena();
+  toast(`Arena "${title}" is open for challengers`, 'ok');
+}
+
+async function joinArena(arenaId) {
+  const a = state.arenas.find(x => x.id === arenaId);
+  if (!a) return;
+  if (!a.participants) a.participants = [];
+  if (a.participants.includes(SESSION_PLAYER)) { toast('Already competing','err'); return; }
+  a.participants.push(SESSION_PLAYER);
+  if (!a.scores) a.scores = {};
+  a.scores[SESSION_PLAYER] = a.participationReward;
+  // Grant participation reward
+  const p = getPlayer(SESSION_PLAYER);
+  if (p) { p.coins += a.participationReward; p.xp += Math.floor(a.participationReward * 0.5); }
+  if (!state.rewards) state.rewards = [];
+  state.rewards.push({ id:'r'+Date.now(), playerId:SESSION_PLAYER, label:`Entered "${a.title}"`, icon:'⚔️', earnedAt:new Date().toISOString(), arenaId });
+  await saveState(); checkTrophies(); renderArena();
+  toast(`You've entered the arena! +${a.participationReward} coins`, 'ok');
+}
+
+async function addArenaPoints(arenaId) {
+  const a = state.arenas.find(x => x.id === arenaId);
+  if (!a) return;
+  const pts = parseInt(prompt('Points to add (e.g. quest completed = 100):')) || 0;
+  if (pts <= 0) return;
+  if (!a.scores) a.scores = {};
+  a.scores[SESSION_PLAYER] = (a.scores[SESSION_PLAYER] || 0) + pts;
+  await saveState(); renderArena();
+  toast(`+${pts} arena points added`, 'ok');
+}
+
+function openArenaDetail(arenaId) {
+  const a = state.arenas.find(x => x.id === arenaId);
+  if (!a) return;
+  const scores = Object.entries(a.scores||{}).sort((x,y)=>y[1]-x[1]);
+  document.getElementById('arenaDetailContent').innerHTML = `
+    <div class="modal-title">🏟 ${a.title}</div>
+    <div style="font-size:14px;color:var(--textm);margin-bottom:16px;line-height:1.6">${a.objective}</div>
+    <div class="sec-title">Leaderboard</div>
+    <div class="leaderboard">
+      ${scores.length ? scores.map(([pid,score],i)=>{
+        const p=getPlayer(pid);const [fg]=(p?.color||'#e0b84a,#333').split(',');
+        return `<div class="lb-row"><div class="lb-rank">${['🥇','🥈','🥉'][i]||i+1}</div><div class="lb-name" style="color:${fg}">${p?.name||'?'}</div><div class="lb-score">${score} pts</div></div>`;
+      }).join('') : '<div style="color:var(--textd);font-style:italic;padding:12px 0">No scores yet.</div>'}
+    </div>
+    <div class="sec-title" style="margin-top:16px">Rewards on Victory</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+      <span class="reward-pill">🏆 ${a.victoryReward} coins</span>
+      ${a.victoryTitle?`<span class="reward-pill">🎖 Title: "${a.victoryTitle}"</span>`:''}
+    </div>`;
+  openModal('arenaDetailModal');
 }
 
 // ═══════════════════════════════════════════
@@ -1671,12 +1928,12 @@ function renderRoster() {
   el.innerHTML = `
     <div class="sec-title">Players</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:28px">
-      ${players.map(p => playerCardHTML(p)).join('')}
+      ${players.map(p => playerCardHTML(p, true)).join('')}
     </div>
     ${arbs.length ? `
       <div class="sec-title">Arbitrators</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">
-        ${arbs.map(p => playerCardHTML(p)).join('')}
+        ${arbs.map(p => playerCardHTML(p, true)).join('')}
       </div>` : `
       <div style="background:rgba(42,90,154,0.08);border:1px solid rgba(42,90,154,0.25);border-radius:7px;padding:14px;font-size:13px;color:var(--rune2)">
         ⚖ No arbitrator set. Add a neutral friend as Arbitrator — they resolve disputes.
@@ -1686,10 +1943,11 @@ function renderRoster() {
 async function addPlayer() {
   const name = v('pName'), role = v('pRole'), country = v('pCountry'), city = v('pCity');
   const lat = parseFloat(v('pLat')), lng = parseFloat(v('pLng')), color = v('pColor');
+  const avatar = document.getElementById('pAvatar')?.value || '⚔️';
   if (!name||!country||!city) { toast('Fill name, country, city','err'); return; }
   const p = {
     id: 'p'+Date.now(), name, role, country, city,
-    lat: isNaN(lat)?0:lat, lng: isNaN(lng)?0:lng, color,
+    lat: isNaN(lat)?0:lat, lng: isNaN(lng)?0:lng, color, avatar,
     xp:0, coins:500, questsCompleted:0, questsFailed:0, questsGiven:0,
     trophies:[], joinedAt:new Date().toISOString()
   };
@@ -1700,6 +1958,37 @@ async function addPlayer() {
   renderPlayerSwitcher();
   toast(`${name} inducted into the Pact`, 'ok');
   clearForm(['pName','pCountry','pCity','pLat','pLng']);
+}
+
+function openEditPlayer(playerId) {
+  const p = getPlayer(playerId);
+  if (!p) return;
+  document.getElementById('editPlayerId').value = p.id;
+  document.getElementById('epName').value = p.name;
+  document.getElementById('epCity').value = p.city;
+  document.getElementById('epLat').value = p.lat;
+  document.getElementById('epLng').value = p.lng;
+  document.getElementById('epColor').value = p.color;
+  initAvatarPicker('avatarPickerEdit','epAvatar', p.avatar||'⚔️');
+  openModal('editPlayerModal');
+}
+
+async function savePlayerEdit() {
+  const id = document.getElementById('editPlayerId').value;
+  const p = getPlayer(id);
+  if (!p) return;
+  p.name  = document.getElementById('epName').value.trim() || p.name;
+  p.city  = document.getElementById('epCity').value.trim() || p.city;
+  p.lat   = parseFloat(document.getElementById('epLat').value) || p.lat;
+  p.lng   = parseFloat(document.getElementById('epLng').value) || p.lng;
+  p.color = document.getElementById('epColor').value || p.color;
+  p.avatar = document.getElementById('epAvatar').value || p.avatar;
+  await saveState();
+  closeModal('editPlayerModal');
+  renderRoster();
+  renderPlayerSwitcher();
+  if (currentPage === 'globe') initGlobe();
+  toast('Player updated', 'ok');
 }
 
 // ═══════════════════════════════════════════
@@ -1715,7 +2004,12 @@ function fillSelect(...ids) {
   });
 }
 
-function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  if (id === 'addPlayerModal') {
+    initAvatarPicker('avatarPickerNew','pAvatar','⚔️');
+  }
+}
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
 document.querySelectorAll('.modal-bg').forEach(el => {
@@ -1733,19 +2027,6 @@ function toast(msg, type='') {
   setTimeout(() => t.remove(), 3500);
 }
 
-// Populate debt modal player selects
-document.getElementById('addDebtModal').addEventListener('click', () => {});
-document.getElementById('addDebtModal').querySelector('.btn').addEventListener('click', addDebt);
-// Pre-populate when opening ledger debt modal
-const origOpenModal = openModal;
-
-// Override openModal to auto-fill selects
-window.openModal = function(id) {
-  document.getElementById(id).classList.add('open');
-  if (id === 'addDebtModal') { fillSelect('dFrom','dTo'); }
-  if (id === 'addPlayerModal') {}
-};
-
 // ═══════════════════════════════════════════
 //  LIVE LOCATION
 // ═══════════════════════════════════════════
@@ -1761,7 +2042,19 @@ async function shareMyLocation() {
     if (player) {
       player.lat = lat; player.lng = lng;
       await saveState();
-      if(status) status.textContent = `✓ ${lat}, ${lng}`;
+      if(status) status.textContent = `✓ ${lat.toFixed(2)}, ${lng.toFixed(2)}`;
+      if(btn) { btn.textContent = '📍 Location Updated!'; setTimeout(() => { btn.disabled = false; btn.textContent = '📍 Share My Location'; }, 3000); }
+      // Rebuild globe with correct pin position
+      renderGlobeSidebar();
+      initGlobe();
+      toast('Your pin updated on the globe', 'ok');
+    }
+  }, err => {
+    if(btn) { btn.disabled = false; btn.textContent = '📍 Share My Location'; }
+    const msgs = { 1:'Permission denied.', 2:'Location unavailable.', 3:'Timed out.' };
+    if(status) status.textContent = msgs[err.code] || 'Location error.';
+  }, { enableHighAccuracy: true, timeout: 10000 });
+}      if(status) status.textContent = `✓ ${lat}, ${lng}`;
       if(btn) { btn.textContent = '📍 Updated!'; setTimeout(() => { btn.disabled = false; btn.textContent = '📍 Share My Location'; }, 3000); }
       renderGlobeSidebar(); initGlobe();
       toast('Your pin updated on the globe', 'ok');
