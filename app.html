@@ -1004,6 +1004,7 @@ function initGlobe() {
     globeRenderer.render(globeScene, globeCamera);
   }
   animate();
+} // end initGlobe
 
 function showQuestPopup(quest, cx, cy, rect) {
   activeQuestPopupId = quest.id;
@@ -2047,16 +2048,6 @@ async function shareMyLocation() {
       // Rebuild globe with correct pin position
       renderGlobeSidebar();
       initGlobe();
-      toast('Your pin updated on the globe', 'ok');
-    }
-  }, err => {
-    if(btn) { btn.disabled = false; btn.textContent = '📍 Share My Location'; }
-    const msgs = { 1:'Permission denied.', 2:'Location unavailable.', 3:'Timed out.' };
-    if(status) status.textContent = msgs[err.code] || 'Location error.';
-  }, { enableHighAccuracy: true, timeout: 10000 });
-}      if(status) status.textContent = `✓ ${lat}, ${lng}`;
-      if(btn) { btn.textContent = '📍 Updated!'; setTimeout(() => { btn.disabled = false; btn.textContent = '📍 Share My Location'; }, 3000); }
-      renderGlobeSidebar(); initGlobe();
       toast('Your pin updated on the globe', 'ok');
     }
   }, err => {
