@@ -72,5 +72,6 @@
     }
   ],
   "nextQuestId": 2,
-  "nextLedgerId": 2
+  "nextLedgerId": 2,
+  "arenas": []
 }
