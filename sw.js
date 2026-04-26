@@ -1,5 +1,5 @@
 // Quest Pact Service Worker
-const CACHE = 'questpact-v3';
+const CACHE = 'questpact-v4';
 
 self.addEventListener('install', e => {
   self.skipWaiting();
