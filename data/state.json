@@ -168,6 +168,12 @@
           "by": "p1",
           "text": "Hi!",
           "at": "2026-04-27T01:46:54.536Z"
+        },
+        {
+          "id": "c1777254416301",
+          "by": "p1",
+          "text": "Hi!",
+          "at": "2026-04-27T01:46:56.301Z"
         }
       ],
       "reactions": {}
@@ -187,6 +193,18 @@
   "rewards": [],
   "arenas": [],
   "activity": [
+    {
+      "id": "a1777254416301793",
+      "type": "comment",
+      "data": {
+        "questId": "q1",
+        "title": "Buy a can of coke",
+        "text": "Hi!"
+      },
+      "actor": "p1",
+      "at": "2026-04-27T01:46:56.301Z",
+      "reactions": {}
+    },
     {
       "id": "a1777254414538823",
       "type": "comment",
