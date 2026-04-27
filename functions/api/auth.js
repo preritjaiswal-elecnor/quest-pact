@@ -67,6 +67,20 @@ export async function onRequest(context) {
     if (action === 'hasPassword') {
       return new Response(JSON.stringify({ has: !!store[playerId] }), { headers: { ...CORS, 'Content-Type': 'application/json' } });
     }
+    if (action === 'changePassword') {
+      const newPassword = body.newPassword;
+      if (!password) return new Response(JSON.stringify({ error: 'Current password required' }), { status: 400, headers: CORS });
+      if (!newPassword || newPassword.length < 6) return new Response(JSON.stringify({ error: 'New password must be at least 6 characters' }), { status: 400, headers: CORS });
+      const record = store[playerId];
+      if (!record) return new Response(JSON.stringify({ error: 'No password set yet' }), { status: 404, headers: CORS });
+      const oldHash = await hashPassword(password, record.salt, pepper);
+      if (oldHash !== record.hash) return new Response(JSON.stringify({ error: 'Current password incorrect' }), { status: 401, headers: CORS });
+      const salt = await randomSalt();
+      const hash = await hashPassword(newPassword, salt, pepper);
+      store[playerId] = { hash, salt, createdAt: record.createdAt, updatedAt: new Date().toISOString() };
+      await putAuthStore(env, store, sha);
+      return new Response(JSON.stringify({ ok: true }), { headers: { ...CORS, 'Content-Type': 'application/json' } });
+    }
     return new Response(JSON.stringify({ error: 'Unknown action' }), { status: 400, headers: CORS });
   } catch (e) {
     return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: CORS });
