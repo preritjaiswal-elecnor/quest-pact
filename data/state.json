@@ -21,7 +21,7 @@
       "coins": 500,
       "questsCompleted": 0,
       "questsFailed": 0,
-      "questsGiven": 1,
+      "questsGiven": 2,
       "trophies": [
         "pact_keeper"
       ],
@@ -177,6 +177,28 @@
         }
       ],
       "reactions": {}
+    },
+    {
+      "id": "q2",
+      "title": "Write a dairy",
+      "description": "Dairy",
+      "assigneeId": "p2",
+      "giverId": "p1",
+      "deadline": "2026-05-04",
+      "reward": 120,
+      "stakes": 0,
+      "difficulty": "medium",
+      "category": "creative",
+      "recurring": "none",
+      "recurringSeriesId": null,
+      "status": "active",
+      "proofUrl": null,
+      "proofNote": null,
+      "disputeReason": null,
+      "createdAt": "2026-04-27T01:48:21.576Z",
+      "completedAt": null,
+      "comments": [],
+      "reactions": {}
     }
   ],
   "ledger": [
@@ -193,6 +215,21 @@
   "rewards": [],
   "arenas": [],
   "activity": [
+    {
+      "id": "a177725450157622",
+      "type": "quest_assigned",
+      "data": {
+        "questId": "q2",
+        "title": "Write a dairy",
+        "assigneeId": "p2",
+        "giverId": "p1",
+        "difficulty": "medium",
+        "category": "creative"
+      },
+      "actor": "p1",
+      "at": "2026-04-27T01:48:21.576Z",
+      "reactions": {}
+    },
     {
       "id": "a1777254416301793",
       "type": "comment",
@@ -219,6 +256,6 @@
     }
   ],
   "chat": [],
-  "nextQuestId": 2,
+  "nextQuestId": 3,
   "nextLedgerId": 2
 }
