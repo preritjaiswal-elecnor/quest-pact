@@ -8,7 +8,12 @@
       "city": "Sydney",
       "lat": -33.8688,
       "lng": 151.2093,
-      "realmHome": { "city": "Sydney", "country": "Australia", "lat": -33.8688, "lng": 151.2093 },
+      "realmHome": {
+        "city": "Sydney",
+        "country": "Australia",
+        "lat": -33.8688,
+        "lng": 151.2093
+      },
       "realmBiome": "coastal",
       "color": "#c9a84c,#7a5010",
       "avatar": "⚔️",
@@ -17,7 +22,9 @@
       "questsCompleted": 0,
       "questsFailed": 0,
       "questsGiven": 1,
-      "trophies": ["pact_keeper"],
+      "trophies": [
+        "pact_keeper"
+      ],
       "inventory": {},
       "streaks": {},
       "joinedAt": "2025-01-01T00:00:00.000Z"
@@ -30,7 +37,12 @@
       "city": "Kamloops",
       "lat": 50.6745,
       "lng": -120.3273,
-      "realmHome": { "city": "Kamloops", "country": "Canada", "lat": 50.6745, "lng": -120.3273 },
+      "realmHome": {
+        "city": "Kamloops",
+        "country": "Canada",
+        "lat": 50.6745,
+        "lng": -120.3273
+      },
       "realmBiome": "tundra",
       "color": "#70b0ff,#1a3060",
       "avatar": "🔮",
@@ -39,7 +51,11 @@
       "questsCompleted": 1,
       "questsFailed": 0,
       "questsGiven": 0,
-      "trophies": ["pact_keeper", "first_blood", "speed_demon"],
+      "trophies": [
+        "pact_keeper",
+        "first_blood",
+        "speed_demon"
+      ],
       "inventory": {},
       "streaks": {},
       "joinedAt": "2025-01-01T00:00:00.000Z"
@@ -52,7 +68,12 @@
       "city": "Vancouver",
       "lat": 49.2827,
       "lng": -123.1207,
-      "realmHome": { "city": "Vancouver", "country": "Canada", "lat": 49.2827, "lng": -123.1207 },
+      "realmHome": {
+        "city": "Vancouver",
+        "country": "Canada",
+        "lat": 49.2827,
+        "lng": -123.1207
+      },
       "realmBiome": "fjord",
       "color": "#50e090,#102a18",
       "avatar": "🏹",
@@ -74,7 +95,12 @@
       "city": "Kolkata",
       "lat": 22.5726,
       "lng": 88.3639,
-      "realmHome": { "city": "Kolkata", "country": "India", "lat": 22.5726, "lng": 88.3639 },
+      "realmHome": {
+        "city": "Kolkata",
+        "country": "India",
+        "lat": 22.5726,
+        "lng": 88.3639
+      },
       "realmBiome": "swamp",
       "color": "#c090ff,#3a1060",
       "avatar": "🛡️",
@@ -94,9 +120,14 @@
       "role": "player",
       "country": "India",
       "city": "Mumbai",
-      "lat": 19.0760,
+      "lat": 19.076,
       "lng": 72.8777,
-      "realmHome": { "city": "Mumbai", "country": "India", "lat": 19.0760, "lng": 72.8777 },
+      "realmHome": {
+        "city": "Mumbai",
+        "country": "India",
+        "lat": 19.076,
+        "lng": 72.8777
+      },
       "realmBiome": "tropical",
       "color": "#ff9040,#601a08",
       "avatar": "🗡️",
@@ -131,7 +162,14 @@
       "createdAt": "2026-03-30T01:34:03.023Z",
       "completedAt": "2026-03-30T01:36:36.919Z",
       "proofSubmittedAt": "2026-03-30T01:35:54.482Z",
-      "comments": [],
+      "comments": [
+        {
+          "id": "c1777254414536",
+          "by": "p1",
+          "text": "Hi!",
+          "at": "2026-04-27T01:46:54.536Z"
+        }
+      ],
       "reactions": {}
     }
   ],
@@ -146,9 +184,22 @@
       "date": "2026-03-30T01:36:36.919Z"
     }
   ],
-  "activity": [],
   "rewards": [],
   "arenas": [],
+  "activity": [
+    {
+      "id": "a1777254414538823",
+      "type": "comment",
+      "data": {
+        "questId": "q1",
+        "title": "Buy a can of coke",
+        "text": "Hi!"
+      },
+      "actor": "p1",
+      "at": "2026-04-27T01:46:54.538Z",
+      "reactions": {}
+    }
+  ],
   "chat": [],
   "nextQuestId": 2,
   "nextLedgerId": 2
